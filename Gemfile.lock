@@ -67,6 +67,7 @@ GEM
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
       rake
+<<<<<<< HEAD
     figaro (1.2.0)
       thor (>= 0.14.0, < 2)
     flog (4.8.0)
@@ -75,6 +76,8 @@ GEM
       sexp_processor (~> 4.8)
     hashdiff (1.0.1)
     hirb (0.7.3)
+=======
+>>>>>>> ec6af98 (new Amadeus API)
     http (5.1.1)
       addressable (~> 2.8)
       http-cookie (~> 1.0)
@@ -86,6 +89,7 @@ GEM
     httparty (0.21.0)
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
+<<<<<<< HEAD
     ice_nine (0.11.2)
     json (2.6.3)
     kwalify (0.7.2)
@@ -156,12 +160,41 @@ GEM
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
       parser (>= 3.2.2.4)
+=======
+    json (2.6.3)
+    language_server-protocol (3.17.0.3)
+    llhttp-ffi (0.4.0)
+      ffi-compiler (~> 1.0)
+      rake (~> 13.0)
+    mini_mime (1.1.5)
+    minitest (5.20.0)
+    minitest-rg (5.2.0)
+      minitest (~> 5.0)
+    multi_xml (0.6.0)
+    parallel (1.23.0)
+    parser (3.2.2.3)
+      ast (~> 2.4.1)
+      racc
+    public_suffix (5.0.3)
+    racc (1.7.1)
+    rainbow (3.1.1)
+    rake (13.0.6)
+    regexp_parser (2.8.1)
+    rexml (3.2.6)
+    rubocop (1.56.4)
+      base64 (~> 0.1.1)
+      json (~> 2.3)
+      language_server-protocol (>= 3.17.0)
+      parallel (~> 1.10)
+      parser (>= 3.2.2.3)
+>>>>>>> ec6af98 (new Amadeus API)
       rainbow (>= 2.2.2, < 4.0)
       regexp_parser (>= 1.8, < 3.0)
       rexml (>= 3.2.5, < 4.0)
       rubocop-ast (>= 1.28.1, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 3.0)
+<<<<<<< HEAD
     rubocop-ast (1.30.0)
       parser (>= 3.2.1.0)
     ruby-progressbar (1.13.0)
@@ -187,11 +220,21 @@ GEM
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
     zeitwerk (2.6.12)
+=======
+    rubocop-ast (1.29.0)
+      parser (>= 3.2.1.0)
+    ruby-progressbar (1.13.0)
+    unf (0.1.4)
+      unf_ext
+    unf_ext (0.0.8.2)
+    unicode-display_width (2.5.0)
+>>>>>>> ec6af98 (new Amadeus API)
 
 PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+<<<<<<< HEAD
   dry-monads (~> 1.4)
   dry-struct (~> 1.0)
   dry-transaction (~> 0.13)
@@ -227,6 +270,13 @@ DEPENDENCIES
 
 RUBY VERSION
    ruby 3.2.2p53
+=======
+  http (~> 5)
+  httparty
+  minitest
+  minitest-rg
+  rubocop
+>>>>>>> ec6af98 (new Amadeus API)
 
 BUNDLED WITH
    2.4.19
