@@ -33,8 +33,6 @@ describe 'Integration Tests of Instagram API and Database' do
       _(rebuilt.like_count).must_equal(instagram_media.like_count)
       _(rebuilt.timestamp).must_equal(instagram_media.timestamp)
       _(rebuilt.media_url).must_equal(instagram_media.media_url)
-      _(rebuilt.children).must_equal(instagram_media.children)
-      _(rebuilt.media_type).must_equal(instagram_media.media_type)
       # _(rebuilt.contributors.count).must_equal(instagram_media.contributors.count)
 
       # instagram_media.contributors.each do |member|

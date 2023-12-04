@@ -39,8 +39,6 @@ media.each do |media_item|
   ig_results['like_count'] = media_item['like_count']
   ig_results['timestamp'] = media_item['timestamp']
   ig_results['media_url'] = media_item['media_url']
-  ig_results['children'] = media_item['children']
-  ig_results['media_type'] = media_item['media_type']
 end
 
 # contributors_url = media['contributors_url']

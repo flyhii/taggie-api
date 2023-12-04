@@ -14,7 +14,7 @@ module FlyHii
         find_remote_id(entity.remote_id)
       end
 
-      def self.find_full_name(hashtag_name)
+      def self.find_full_name
         db_info = Database::MediaOrm.all
         # TODO: find_full_name for app/controller
         db_info.map do |db_post|
