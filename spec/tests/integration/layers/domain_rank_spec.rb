@@ -15,7 +15,7 @@ describe 'Test IG Commands Mapper and Gateway' do
       .new(INSTAGRAM_TOKEN, ACCOUNT_ID)
       .find(HASHTAG_NAME)
 
-    media_info = ig_posts.map do |ig_post|
+    ig_posts.map do |ig_post|
       FlyHii::Repository::For.entity(ig_post)
         .create(ig_post)
     end
