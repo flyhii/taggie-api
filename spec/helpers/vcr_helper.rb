@@ -16,7 +16,7 @@ module VcrHelper
   end
 
   # Unavoidable :reek:TooManyStatements for VCR configuration
-  def self.configure_vcr_for_instagram
+  def self.configure_vcr_for_instagram(recording: :new_episodes)
     VCR.configure do |config|
       config.filter_sensitive_data('<INSTAGRAM_TOKEN>') { INSTAGRAM_TOKEN }
       config.filter_sensitive_data('<INSTAGRAM_TOKEN_ESC>') { CGI.escape(INSTAGRAM_TOKEN) }
@@ -24,7 +24,7 @@ module VcrHelper
 
     VCR.insert_cassette(
       INSTAGRAM_CASSETTE,
-      record: :new_episodes,
+      record: recording,
       match_requests_on: %i[method uri headers]
     )
   end

@@ -10,7 +10,7 @@ describe 'Ranking Posts Service Integration Test' do
   VcrHelper.setup_vcr
 
   before do
-    VcrHelper.configure_vcr_for_github(recording: :none)
+    VcrHelper.configure_vcr_for_instagram(recording: :none)
   end
 
   after do
@@ -24,13 +24,16 @@ describe 'Ranking Posts Service Integration Test' do
 
     it 'HAPPY: should return hashtags that are being rank' do
       # GIVEN: a valid post exists locally and is being watched
-      ig_post = FlyHii::Instagram::MediaMapper
-        .new(App.config.INSTAGRAM_TOKEN, App.config.ACCOUNT_ID)
-        .find(hashtag_name)
-      db_post = FlyHii::Repository::For.entity(ig_post)
-        .create(ig_post)
+      ig_posts = FlyHii::Instagram::MediaMapper
+        .new(INSTAGRAM_TOKEN, ACCOUNT_ID)
+        .find(HASHTAG_NAME)
 
-      watched_list = ["#{USERNAME}/#{PROJECT_NAME}"]
+      db_post = ig_posts.map do |ig_post|
+        FlyHii::Repository::For.entity(ig_post)
+          .create(ig_post)
+      end
+
+      watched_list = [HASHTAG_NAME]
 
       # WHEN: we request a list of all watched posts
       result = FlyHii::Service::ListPosts.new.call(watched_list)
@@ -43,11 +46,14 @@ describe 'Ranking Posts Service Integration Test' do
 
     it 'HAPPY: should not return posts that are not being watched' do
       # GIVEN: a valid post exists locally but is not being watched
-      ig_post = FlyHii::Instagram::MediaMapper
-        .new(App.config.INSTAGRAM_TOKEN, App.config.ACCOUNT_ID)
-        .find(hashtag_name)
-      FlyHii::Repository::For.entity(ig_post)
-        .create(ig_post)
+      ig_posts = FlyHii::Instagram::MediaMapper
+        .new(INSTAGRAM_TOKEN, ACCOUNT_ID)
+        .find(HASHTAG_NAME)
+
+      ig_posts.map do |ig_post|
+        FlyHii::Repository::For.entity(ig_post)
+          .create(ig_post)
+      end
 
       watched_list = []
 
@@ -62,7 +68,7 @@ describe 'Ranking Posts Service Integration Test' do
 
     it 'SAD: should not watched posts if they are not loaded' do
       # GIVEN: we are watching a post that does not exist locally
-      watched_list = ["#{USERNAME}/#{PROJECT_NAME}"]
+      watched_list = [HASHTAG_NAME]
 
       # WHEN: we request a list of all watched posts
       result = FlyHii::Service::ListPosts.new.call(watched_list)

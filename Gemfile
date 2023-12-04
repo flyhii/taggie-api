@@ -27,11 +27,9 @@ gem 'dry-validation', '~> 1.7'
 gem 'dry-struct', '~> 1.0'
 gem 'dry-types', '~> 1.0'
 
-
 # INFRASTRUCTURE LAYER
 # Networking
 gem 'http', '~> 5.0'
-gem 'httparty'
 
 # Database
 gem 'hirb'
@@ -43,7 +41,7 @@ group :development, :test do
 end
 
 group :production do
-  gem 'pg'
+  gem 'pg', '~> 1.2'
 end
 
 # TESTING

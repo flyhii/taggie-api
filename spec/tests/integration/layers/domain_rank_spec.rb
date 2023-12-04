@@ -13,10 +13,12 @@ describe 'Test IG Commands Mapper and Gateway' do
 
     ig_posts = FlyHii::Instagram::MediaMapper
       .new(INSTAGRAM_TOKEN, ACCOUNT_ID)
-      .find(HASHTAG_ID)
+      .find(HASHTAG_NAME)
 
-    media_info = FlyHii::Repository::For.entity(ig_posts)
-      .create(ig_posts)
+    media_info = ig_posts.map do |ig_post|
+      FlyHii::Repository::For.entity(ig_post)
+        .create(ig_post)
+    end
 
     # @gitrepo = FlyHii::GitRepo.new(media_info)
     # @gitrepo.clone! unless @gitrepo.exists_locally?

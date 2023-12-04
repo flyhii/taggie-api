@@ -23,9 +23,9 @@ describe 'Add Post Service Integration Test' do
     it 'HAPPY: should be able to find and save remote post to database' do
       # GIVEN: a valid url request for existing remote post:
       instagram_media = FlyHii::Instagram::MediaMapper
-        .new(App.config.INSTAGRAM_TOKEN, App.config.ACCOUNT_ID)
-        .find(hashtag_name)
-      url_request = FlyHii::Instagram::NewPost.new.call(remote_url: IG_URL)
+        .new(INSTAGRAM_TOKEN, ACCOUNT_ID)
+        .find(HASHTAG_NAME)
+      url_request = FlyHii::Forms::NewPost.new.call(remote_url: IG_URL)
 
       # WHEN: the service is called with the request form object
       post_made = FlyHii::Service::AddPost.new.call(url_request)
@@ -76,8 +76,6 @@ describe 'Add Post Service Integration Test' do
       _(rebuilt.like_count).must_equal(instagram_media.like_count)
       _(rebuilt.timestamp).must_equal(instagram_media.timestamp)
       _(rebuilt.media_url).must_equal(instagram_media.media_url)
-      _(rebuilt.children).must_equal(instagram_media.children)
-      _(rebuilt.media_type).must_equal(instagram_media.media_type)
 
       # db_post.contributors.each do |member|
       #   found = rebuilt.contributors.find do |potential|

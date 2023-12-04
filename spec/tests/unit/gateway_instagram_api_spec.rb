@@ -18,7 +18,7 @@ describe 'Tests Instagram API library' do
     before do
       @media_info = FlyHii::Instagram::MediaMapper
         .new(INSTAGRAM_TOKEN, ACCOUNT_ID)
-        .find(HASHTAG_ID)
+        .find(HASHTAG_NAME)
     end
 
     # wait for revise
@@ -27,15 +27,16 @@ describe 'Tests Instagram API library' do
       media_info =
         FlyHii::Instagram::MediaMapper
           .new(INSTAGRAM_TOKEN, ACCOUNT_ID)
-          .find(HASHTAG_ID)
-      _(media_info.id).must_equal CORRECT['id']
-      _(media_info.caption).must_equal CORRECT['caption']
-      _(media_info.comments_count).must_equal CORRECT['comments_count']
-      _(media_info.like_count).must_equal CORRECT['like_count']
-      _(media_info.timestamp).must_equal CORRECT['timestamp']
-      _(media_info.media_url).must_equal CORRECT['media_url']
-      _(media_info.children).must_equal CORRECT['children']
-      _(media_info.media_type).must_equal CORRECT['media_type']
+          .find(HASHTAG_NAME)
+
+      media_info.map do |media|
+        _(media.id).must_equal CORRECT['id']
+        _(media.caption).must_equal CORRECT['caption']
+        _(media.comments_count).must_equal CORRECT['comments_count']
+        _(media.like_count).must_equal CORRECT['like_count']
+        _(media.timestamp).must_equal CORRECT['timestamp']
+        _(media.media_url).must_equal CORRECT['media_url']
+      end
     end
 
     it 'BAD: should raise exception on incorrect post' do

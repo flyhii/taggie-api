@@ -31,19 +31,37 @@ namespace :spec do
   end
 end
 
-desc 'Keep rerunning tests upon changes'
+desc 'Keep rerunning unit/integration tests upon changes'
 task :respec do
-  sh "rerun -c 'rake spec' --ignore 'coverage/*'"
+  sh "rerun -c 'rake spec' --ignore 'coverage/*' --ignore 'repostore/*'"
 end
 
-desc 'Run web app'
-task :run do
-  sh 'bundle exec puma'
+desc 'Run web app in default mode'
+task run: ['run:default']
+
+namespace :run do
+  desc 'Run web app in development or production'
+  task :default do
+    sh 'bundle exec puma'
+  end
+
+  desc 'Run web app for acceptance tests'
+  task :test do
+    sh 'RACK_ENV=test puma -p 9000'
+  end
 end
 
 desc 'Keep rerunning web app upon changes'
 task :rerun do
-  sh "rerun -c --ignore 'coverage/*' -- bundle exec puma"
+  sh "rerun -c --ignore 'coverage/*' --ignore 'repostore/*' -- bundle exec puma"
+end
+
+desc 'Generates a 64 by secret for Rack::Session'
+task :new_session_secret do
+  require 'base64'
+  require 'SecureRandom'
+  secret = SecureRandom.random_bytes(64).then { Base64.urlsafe_encode64(_1) }
+  puts "SESSION_SECRET: #{secret}"
 end
 
 namespace :db do
@@ -52,7 +70,7 @@ namespace :db do
     require_relative 'config/environment' # load config info
     require_relative 'spec/helpers/database_helper'
 
-    def app = FlyHii::App
+    def app = CodePraise::App
   end
 
   desc 'Run migrations'
@@ -89,7 +107,7 @@ end
 namespace :repos do
   task :config do
     require_relative 'config/environment' # load config info
-    def app = FlyHii::App
+    def app = CodePraise::App
   end
 
   desc 'Create director for repo store'

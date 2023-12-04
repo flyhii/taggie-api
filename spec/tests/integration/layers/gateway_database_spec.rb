@@ -23,16 +23,18 @@ describe 'Integration Tests of Instagram API and Database' do
     it 'HAPPY: should be able to save post from Instagram to database' do
       instagram_media = FlyHii::Instagram::MediaMapper
         .new(INSTAGRAM_TOKEN, ACCOUNT_ID)
-        .find(HASHTAG_ID)
+        .find(HASHTAG_NAME)
 
-      rebuilt = FlyHii::Repository::For.entity(instagram_media).create(instagram_media)
+      instagram_media.map do |media|
+        rebuilt = FlyHii::Repository::For.entity(media).create(media)
 
-      _(rebuilt.id).must_equal(instagram_media.id)
-      _(rebuilt.caption).must_equal(instagram_media.caption)
-      _(rebuilt.comments_count).must_equal(instagram_media.comments_count)
-      _(rebuilt.like_count).must_equal(instagram_media.like_count)
-      _(rebuilt.timestamp).must_equal(instagram_media.timestamp)
-      _(rebuilt.media_url).must_equal(instagram_media.media_url)
+        _(rebuilt.id).must_equal(media.id)
+        _(rebuilt.caption).must_equal(media.caption)
+        _(rebuilt.comments_count).must_equal(media.comments_count)
+        _(rebuilt.like_count).must_equal(media.like_count)
+        _(rebuilt.timestamp).must_equal(media.timestamp)
+        _(rebuilt.media_url).must_equal(media.media_url)
+      end
       # _(rebuilt.contributors.count).must_equal(instagram_media.contributors.count)
 
       # instagram_media.contributors.each do |member|

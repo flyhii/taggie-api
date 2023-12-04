@@ -10,7 +10,7 @@ module FlyHii
       API_IG_ROOT = 'https://graph.facebook.com/v18.0'
       FIELDS = 'id,caption,comments_count,like_count,timestamp,media_url,children,media_type'
 
-      URL_REGEX = %r{(http[s]?)://(www.)?facebook\.com/.*/.*(?<!git)$}
+      URL_REGEX = %r{(http[s]?)://(www.)?graph\.facebook\.com/.*/.*(?<!git)$}
       MSG_INVALID_URL = 'is an invalid address for a instagram hashtag'
 
       params do
