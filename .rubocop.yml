@@ -9,6 +9,7 @@ AllCops:
     - '**/*.rb'
   Exclude:
     - '_snippets/**/*'
+    - 'repostore/**/*'
 
 # Ignore block length where unavoidable (e.g., frameworks using blocks)
 Metrics/BlockLength:
@@ -17,7 +18,6 @@ Metrics/BlockLength:
     - 'spec/**/*'
     - Rakefile
     - app/application/controllers/**/*.rb # Roda's nested controllers require large blocks
-    - app/controllers/**/*.rb # Roda's nested controllers require large blocks
     - spec/**/* # Minitest's nested test structure requires large blocks
     - Rakefile # Rake namespaces produce large blocks
 

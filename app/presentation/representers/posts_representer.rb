@@ -13,7 +13,7 @@ module FlyHii
       include Roar::JSON
 
       collection :posts, extend: Representer::Post,
-                            class: Representer::OpenStructWithLinks # TODO: change
+                         class: Representer::OpenStructWithLinks # TODO: change
     end
   end
 end

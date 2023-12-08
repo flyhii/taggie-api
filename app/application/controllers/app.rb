@@ -5,14 +5,13 @@ require 'roda'
 module FlyHii
   # Web App
   class App < Roda
-
     plugin :halt
     plugin :flash
     plugin :all_verbs # allows DELETE and other HTTP verbs beyond GET/POST
 
     # use Rack::MethodOverride # for other HTTP verbs (with plugin all_verbs)
 
-    # rubocop:disable Metrics/BlockLength
+    # rubocop:disable Metrics/BlockLength,Lint/RedundantCopDisableDirective,Lint/MissingCopEnableDirective
     route do |routing|
       response['Content-Type'] = 'application/json'
 

@@ -19,7 +19,7 @@ describe 'Unit test of Result value' do
 
   it 'should report error for invalid status' do
     _(proc do
-        FlyHii::Response::ApiResult.new(status: :foobar, message: 'foo')
+      FlyHii::Response::ApiResult.new(status: :foobar, message: 'foo')
     end).must_raise ArgumentError
   end
 end

@@ -7,8 +7,6 @@ module FlyHii
       def initialize(tag_name)
         @tag_name = tag_name
       end
-
-
     end
   end
 end

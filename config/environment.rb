@@ -41,6 +41,6 @@ module FlyHii
 
     # Logger Setup
     @logger = Logger.new($stderr)
-    def self.logger = @logger
+    def self.logger = @logger # rubocop:disable Style/TrivialAccessors
   end
 end

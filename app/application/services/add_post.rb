@@ -34,11 +34,11 @@ module FlyHii
           else
             input[:local_post]
           end
-          Success(Response::ApiResult.new(status: :created, message: post))
-        rescue StandardError => e
-          # App.logger.error("ERROR: #{e.inspect}")
-          Failure(Response::ApiResult.new(status: :internal_error, message: DB_ERR_MSG))
-        end
+        Success(Response::ApiResult.new(status: :created, message: post))
+      rescue StandardError
+        # App.logger.error("ERROR: #{e.inspect}")
+        Failure(Response::ApiResult.new(status: :internal_error, message: DB_ERR_MSG))
+      end
 
       # Support methods for steps
 
@@ -46,9 +46,9 @@ module FlyHii
         FlyHii::Instagram::MediaMapper
           .new(App.config.INSTAGRAM_TOKEN, App.config.ACCOUNT_ID)
           .find(input)
-        rescue StandardError
-          raise IG_NOT_FOUND_MSG
-        end
+      rescue StandardError
+        raise IG_NOT_FOUND_MSG
+      end
 
       def post_in_database(input)
         Repository::For.klass(Entity::Post)

@@ -13,7 +13,7 @@ module FlyHii
 
       property :rank
       collection :hashtags, extend: Representer::Hashtag,
-                                class: OpenStruct
+                            class: Struct
     end
   end
 end

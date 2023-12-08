@@ -17,8 +17,8 @@ describe 'Tests Github API library' do
   describe 'Project information' do
     before do
       @post = FlyHii::Instagram::MediaMapper
-      .new(INSTAGRAM_TOKEN, ACCOUNT_ID)
-      .find(HASHTAG_NAME)
+        .new(INSTAGRAM_TOKEN, ACCOUNT_ID)
+        .find(HASHTAG_NAME)
     end
 
     it 'HAPPY: should provide correct project attributes' do

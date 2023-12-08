@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+# frozen_string_literal: true # rubocop:disable Layout/EndOfLine,Style/FrozenStringLiteralComment
 
 # Helper to clean database during test runs
 module DatabaseHelper

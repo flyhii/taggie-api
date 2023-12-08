@@ -11,13 +11,13 @@ HASHTAG_NAME = 'new'
 HASHTAG_ID = '17842307719068454'
 
 def get_hashtag_url(config)
-  url = "#{API_IG_ROOT}/ig_hashtag_search?user_id=#{config['ACCOUNT_ID']}&q=#{HASHTAG_NAME}&access_token=#{config['INSTAGRAM_TOKEN']}"
+  url = "#{API_IG_ROOT}/ig_hashtag_search?user_id=#{config['ACCOUNT_ID']}&q=#{HASHTAG_NAME}&access_token=#{config['INSTAGRAM_TOKEN']}" # rubocop:disable Layout/LineLength
   # HTTParty.get(url)
   HTTParty.get(url).parsed_response['data']
 end
 
 def call_ig_url(config, hashtag_id)
-  url = "#{API_IG_ROOT}/#{hashtag_id}/top_media?user_id=#{config['ACCOUNT_ID']}&fields=#{FIELDS}&access_token=#{config['INSTAGRAM_TOKEN']}"
+  url = "#{API_IG_ROOT}/#{hashtag_id}/top_media?user_id=#{config['ACCOUNT_ID']}&fields=#{FIELDS}&access_token=#{config['INSTAGRAM_TOKEN']}" # rubocop:disable Layout/LineLength
   # HTTParty.get(url)
   HTTParty.get(url).parsed_response['data']
 end
