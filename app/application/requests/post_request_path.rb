@@ -3,7 +3,7 @@
 module FlyHii
   module Request
     # Application value for the path of a requested post
-    class PostRequestPath
+    class PostPath
       def initialize(post_name, request)
         @post_name = post_name
         @request = request

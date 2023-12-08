@@ -1,97 +1,90 @@
 # frozen_string_literal: true
 
 require 'roda'
-require 'slim'
-require 'slim/include'
-
-require_relative 'helpers'
 
 module FlyHii
   # Web App
   class App < Roda
-    include RouteHelpers
 
     plugin :halt
     plugin :flash
     plugin :all_verbs # allows DELETE and other HTTP verbs beyond GET/POST
-    plugin :render, engine: 'slim', views: 'app/presentation/views_html'
-    plugin :public, root: 'app/presentation/public'
-    plugin :assets, path: 'app/presentation/assets',
-                    css: 'style.css', js: 'table_row.js'
-    plugin :common_logger, $stderr
 
-    MSG_GET_STARTED = 'Search for a Hashtag to get started'
-    MSG_POST_ADDED = 'Post added to your list'
+    # use Rack::MethodOverride # for other HTTP verbs (with plugin all_verbs)
 
+    # rubocop:disable Metrics/BlockLength
     route do |routing|
-      routing.assets # load CSS
-      response['Content-Type'] = 'text/html; charset=utf-8'
-      routing.public
+      response['Content-Type'] = 'application/json'
 
       # GET /
       routing.root do
-        # Get cookie viewer's previously seen hashtags
-        session[:watching] ||= []
-        hashtags = session[:watching]
-        flash.now[:notice] = MSG_GET_STARTED if hashtags.none?
+        message = "Taggie API v1 at /api/v1/ in #{App.environment} mode"
 
-        searched_hashtags = Views::HashtagsList.new(hashtags)
+        result_response = Representer::HttpResponse.new(
+          Response::ApiResult.new(status: :ok, message:)
+        )
 
-        view 'home', locals: { hashtags: searched_hashtags }
+        response.status = result_response.http_status_code
+        result_response.to_json
       end
 
-      routing.on 'media' do
-        routing.is do
-          # POST /media/
-          routing.post do
-            hashtag_name = Forms::HashtagName.new.call(routing.params)
-            post_made = Service::AddPost.new.call(hashtag_name)
+      routing.on 'api/v1' do
+        routing.on 'posts' do
+          routing.on String do |hashtag_name|
+            # GET /posts/{hashtag_name}
+            routing.get do
+              path_request = Request::PostPath.new(
+                hashtag_name, request
+              )
 
-            if post_made.failure?
-              flash[:error] = post_made.failure
-              routing.redirect '/'
+              result = Service::AppraisePost.new.call(requested: path_request)
+
+              if result.failure?
+                failed = Representer::HttpResponse.new(result.failure)
+                routing.halt failed.http_status_code, failed.to_json
+              end
+
+              http_response = Representer::HttpResponse.new(result.value!)
+              response.status = http_response.http_status_code
+
+              # TODO: change
+              Representer::ProjectFolderContributions.new(
+                result.value!.message
+              ).to_json
             end
 
-            post = post_made.value!
-            session[:watching].insert(0, post.fullname).uniq!
-            flash[:notice] = MSG_POST_ADDED
-            routing.redirect "media/#{hashtag_name}"
-          end
-        end
+            # POST /posts/{hashtag_name}
+            routing.post do
+              result = Service::AddPost.new.call(
+                hashtag_name:
+              )
 
-        routing.on String, String do |hashtag_name|
-          # DELETE /media/hashtag_name
-          routing.delete do
-            fullname = "#{hashtag_name}"
-            session[:watching].delete(fullname)
+              if result.failure?
+                failed = Representer::HttpResponse.new(result.failure)
+                routing.halt failed.http_status_code, failed.to_json
+              end
 
-            routing.redirect '/'
-          end
-
-          # GET /media/hashtag_name/ranking
-          routing.get do
-            path_request = PostRequestPath.new(
-              post_name, request
-            )
-
-            session[:watching] ||= []
-
-            result = Service::AppraisePost.new.call(
-              watched_list: session[:watching],
-              requested: path_request
-            )
-
-            if result.failure?
-              flash[:error] = result.failure
-              routing.redirect '/'
+              http_response = Representer::HttpResponse.new(result.value!)
+              response.status = http_response.http_status_code
+              Representer::POST.new(result.value!.message).to_json
             end
+          end
 
-            appraised = result.value!
-            post_folder = Views::ProjectFolderContributions.new(
-              appraised[:media], appraised[:folder]
-            )
+          routing.is do
+            # GET /posts?list={base64_json_array_of_project_fullnames}
+            routing.get do
+              list_req = Request::EncodedPostList.new(routing.params)
+              result = Service::ListPosts.new.call(list_request: list_req)
 
-            view 'media', locals: { post_folder: }
+              if result.failure?
+                failed = Representer::HttpResponse.new(result.failure)
+                routing.halt failed.http_status_code, failed.to_json
+              end
+
+              http_response = Representer::HttpResponse.new(result.value!)
+              response.status = http_response.http_status_code
+              Representer::PostsList.new(result.value!.message).to_json
+            end
           end
         end
       end

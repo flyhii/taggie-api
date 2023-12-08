@@ -8,20 +8,13 @@ module FlyHii
     class AddPost
       include Dry::Transaction
 
-      step :get_name
       step :find_hashtag_name
       step :store_post
 
       private
 
-      def get_name(input)
-        if input.success?
-          hashtag_name = input
-          Success(hashtag_name:)
-        else
-          Failure("URL #{input.errors.messages.first}")
-        end
-      end
+      DB_ERR_MSG = 'Having trouble accessing the database'
+      IG_NOT_FOUND_MSG = 'Could not find that post on Instagram'
 
       def find_hashtag_name(input)
         if (post = post_in_database(input))
@@ -30,8 +23,8 @@ module FlyHii
           input[:remote_post] = post_from_instagram(input)
         end
         Success(input)
-      rescue StandardError => error
-        Failure(error.to_s)
+      rescue StandardError => e
+        Failure(Response::ApiResult.new(status: :not_found, message: e.to_s))
       end
 
       def store_post(input)
@@ -41,26 +34,25 @@ module FlyHii
           else
             input[:local_post]
           end
-        Success(post)
-      rescue StandardError => error
-        App.logger.error error.backtrace.join("\n")
-        puts 'add_post'
-        Failure('Having trouble accessing the database')
-      end
+          Success(Response::ApiResult.new(status: :created, message: post))
+        rescue StandardError => e
+          # App.logger.error("ERROR: #{e.inspect}")
+          Failure(Response::ApiResult.new(status: :internal_error, message: DB_ERR_MSG))
+        end
 
-      # following are support methods that other services could use
+      # Support methods for steps
 
       def post_from_instagram(input)
         FlyHii::Instagram::MediaMapper
           .new(App.config.INSTAGRAM_TOKEN, App.config.ACCOUNT_ID)
           .find(input)
-      rescue StandardError
-        raise 'Could not find that post on Instagram'
-      end
+        rescue StandardError
+          raise IG_NOT_FOUND_MSG
+        end
 
       def post_in_database(input)
         Repository::For.klass(Entity::Post)
-          .find_full_name(input[:owner_name], input[:project_name])
+          .find_full_name(input)
       end
     end
   end

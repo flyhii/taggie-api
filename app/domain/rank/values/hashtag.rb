@@ -1,11 +1,10 @@
 # frozen_string_literal: true
-# need to change!!!!!!!!!!!!!
 
 require 'dry-types'
 require 'dry-struct'
 
 module FlyHii
-  module Entity
+  module Value
     # Domain entity for hashtag
     class Hashtag < Dry::Struct
       include Dry.Types

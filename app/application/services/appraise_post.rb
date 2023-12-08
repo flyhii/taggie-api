@@ -8,43 +8,39 @@ module FlyHii
     class AppraisePost
       include Dry::Transaction
 
-      step :ensure_watched_post
       step :retrieve_remote_post
-      step :clone_remote
+      # step :clone_remote
       step :appraise_ranking
 
       private
 
-      # Steps
+      NO_PROJ_ERR = 'Post not found'
+      DB_ERR = 'Having trouble accessing the database'
+      # CLONE_ERR = 'Could not clone this project'
+      NO_FOLDER_ERR = 'Could not find that folder'
 
-      def ensure_watched_post(input)
-        if input[:watched_list].include? input[:requested].post_fullname
-          Success(input)
-        else
-          Failure('Please first request this post to be added to your list')
-        end
-      end
+      # Steps
 
       def retrieve_remote_post(input)
         input[:post] = Repository::For.klass(Entity::Post).find_full_name(
           input[:requested].owner_name, input[:requested].post_name
         )
 
-        input[:post] ? Success(input) : Failure('Post not found')
+        input[:post] ? Success(input) : Failure(Response::ApiResult.new(status: :not_found, message: NO_PROJ_ERR))
       rescue StandardError
-        Failure('Having trouble accessing the database')
+        Failure(Response::ApiResult.new(status: :internal_error, message: DB_ERR))
       end
 
       # can skip
-      def clone_remote(input)
-        gitrepo = GitRepo.new(input[:post])
-        gitrepo.clone! unless gitrepo.exists_locally?
+      # def clone_remote(input)
+      #   gitrepo = GitRepo.new(input[:post])
+      #   gitrepo.clone! unless gitrepo.exists_locally?
 
-        Success(input.merge(gitrepo:))
-      rescue StandardError
-        App.logger.error error.backtrace.join("\n")
-        Failure('Could not clone this project')
-      end
+      #   Success(input.merge(gitrepo:))
+      # rescue StandardError
+      #   App.logger.error error.backtrace.join("\n")
+      #   Failure(Response::ApiResult.new(status: :internal_error, message: CLONE_ERR))
+      # end
 
       def appraise_ranking(input)
         input[:folder] = Mapper::Contributions
@@ -53,7 +49,7 @@ module FlyHii
         Success(input)
       rescue StandardError
         App.logger.error "Could not find: #{full_request_path(input)}"
-        Failure('Could not find that folder')
+        Failure(Response::ApiResult.new(status: :not_found, message: NO_FOLDER_ERR))
       end
 
       # Helper methods
