@@ -7,7 +7,7 @@ require 'roar/json'
 module FlyHii
   module Representer
     # Represent a Project entity as Json
-    class Project < Roar::Decorator
+    class Post < Roar::Decorator
       include Roar::JSON
       include Roar::Hypermedia
       include Roar::Decorator::HypermediaConsumer

@@ -3,8 +3,7 @@
 require 'roar/decorator'
 require 'roar/json'
 
-require_relative 'openstruct_with_links'
-require_relative 'project_representer'
+require_relative 'post_representer'
 
 module FlyHii
   module Representer
@@ -12,8 +11,7 @@ module FlyHii
     class PostsList < Roar::Decorator
       include Roar::JSON
 
-      collection :posts, extend: Representer::Post,
-                         class: Representer::OpenStructWithLinks # TODO: change
+      collection :posts, extend: Representer::Post
     end
   end
 end

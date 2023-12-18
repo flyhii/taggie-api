@@ -6,10 +6,12 @@ ruby File.read('.ruby-version').strip
 # CONFIGURATION
 gem 'figaro', '~> 1.2'
 gem 'pry'
+gem 'rack-test' # for testing and can also be used to diagnose in production
 gem 'rake', '~> 13.0'
 
 # PRESENTATION LAYER
-gem 'slim', '~> 5.0'
+gem 'multi_json', '~> 1.15'
+gem 'roar', '~> 1.1'
 
 # APPLICATION LAYER
 # Web application related
@@ -22,6 +24,11 @@ gem 'dry-monads', '~> 1.4'
 gem 'dry-transaction', '~> 0.13'
 gem 'dry-validation', '~> 1.7'
 
+# Caching
+gem 'rack-cache', '~> 1.13'
+gem 'redis', '~> 4.8'
+gem 'redis-rack-cache', '~> 2.2'
+
 # DOMAIN LAYER
 # Validation
 gem 'dry-struct', '~> 1.0'
@@ -30,6 +37,7 @@ gem 'dry-types', '~> 1.0'
 # INFRASTRUCTURE LAYER
 # Networking
 gem 'http', '~> 5.0'
+gem 'httparty'
 
 # Database
 gem 'hirb'
@@ -51,12 +59,6 @@ group :test do
   gem 'simplecov', '~> 0.0'
   gem 'vcr', '~> 6.0'
   gem 'webmock', '~> 3.0'
-
-  gem 'headless', '~> 2.3'
-  gem 'page-object', '~> 2.3'
-  gem 'watir', '~> 7.0'
-  # gem 'webdrivers', '~> 5.0'
-  gem 'selenium-webdriver', '~> 4.11'
 end
 
 # Development

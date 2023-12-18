@@ -10,10 +10,6 @@ module FlyHii
       include Dry.Types
 
       attribute :hashtag_name, Strict::String
-
-      def to_attr_hash
-        { hashtag_name: }
-      end
     end
   end
 end
