@@ -37,7 +37,7 @@ module FlyHii
         tags = rebuild_many(tags)
 
         tags.map do |hashtag|
-          Database::HashtagOrm.find_or_create(hashtag.to_attr_hash)
+          Database::HashtagOrm.find_or_create(hashtag)
         end
       end
     end

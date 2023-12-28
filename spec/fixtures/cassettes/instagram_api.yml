@@ -1604,4 +1604,79 @@ http_interactions:
         #georgieebleu #georgieandemma #missuemma #emmaandtaylor #jennaandemma #myersfamily
         #babyemma #17kfollowers","comments_count":6,"like_count":491,"timestamp":"2023-12-03T19:57:03+0000","children":{"data":[{"id":"18044611282559956"},{"id":"18023743510842446"},{"id":"18025986286678143"}]},"media_type":"CAROUSEL_ALBUM"}],"paging":{"cursors":{"after":"OGRjZAjEyZAWRjM2QwNDkwMWIzM2RmMGIxNGU0NTNiODEZD"},"next":"https:\/\/graph.facebook.com\/v18.0\/17842307719068454\/top_media?user_id=17841462175987660&fields=id,caption,comments_count,like_count,timestamp,media_url,children,media_type&access_token=<INSTAGRAM_TOKEN>&limit=25&after=OGRjZAjEyZAWRjM2QwNDkwMWIzM2RmMGIxNGU0NTNiODEZD"}}'
   recorded_at: Mon, 04 Dec 2023 08:56:39 GMT
+- request:
+    method: get
+    uri: https://graph.facebook.com/v18.0/ig_hashtag_search?access_token=BAD_TOKEN&q=new&user_id=17841462175987660
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Vary:
+      - Origin
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Type:
+      - application/json; charset=UTF-8
+      Www-Authenticate:
+      - OAuth "Facebook Platform" "invalid_token" "Invalid OAuth access token - Cannot
+        parse access token"
+      Strict-Transport-Security:
+      - max-age=15552000; preload
+      Pragma:
+      - no-cache
+      Cache-Control:
+      - no-store
+      Expires:
+      - Sat, 01 Jan 2000 00:00:00 GMT
+      X-Fb-Request-Id:
+      - A0hMhmDD8CzL7rIy3hpfos0
+      X-Fb-Trace-Id:
+      - EXEd0iwE+mX
+      X-Fb-Rev:
+      - '1010582314'
+      X-Fb-Debug:
+      - fJUQvh/K1ZqJLgXndmj7erAuwMCquIXKxJ4lv+uvGzVLyAUnXiUYGpmeOJtADG/ZaBcQeVufheey/JWYmkxn8w==
+      Date:
+      - Sun, 24 Dec 2023 16:47:47 GMT
+      Proxy-Status:
+      - http_request_error; e_clientaddr="AcLHzU_lmUcQryyiMhIjZzxjEgLd3JctHSMVG4hWRaGwSY2OY-DsXcB-hrXwal38eAKC6jaHK54RBTS25HF2AposbkG6R7IqPVr_6RiQDSCS5Q";
+        e_fb_vipport="AcJpaOFHVweWkf7Zzbkdb0gYkyMIRmaRlbfgWPf5Af6ACIXNY4iRvLNnT14f";
+        e_upip="AcJiKkQn8xYOJhXLg8_xBrXXTlDo8e-za9-9YwHrWcGZ1KbGJrURYIGmEJDo7shfNmTAWmOiaGBDZYqXCYy3ti-T5IyETPXK4w";
+        e_fb_hostheader="AcIjjCtzg3q7hCWo3iY16eqPLyHn_dtqbq5u-HvnFu3DU_iEBvmf5kJ-nCM06twQ_RO5-kTpZaCxqpA-";
+        e_fb_vipaddr="AcKr1jpRGoh7hMxRJY-Bqvn4ljKT9t_G0UPTGPYA1QIuq0_LfI29_emNo2hnbg4NaWYB7gBcfnHaxxE0mHyAqZlSUb_0ItHvEQ";
+        e_fb_requesthandler="AcJpOgMC_L3wk9bHDnVwizD__s6XToag5-7BFCKGrWYcOPpWPSrWqmlmBuIczDkppowTaN0ZI1w";
+        e_fb_builduser="AcK3V6tIkTxT0gEG6pDwEUFOiOBbcoPdG_FAnl6cWx7v_tq6J7DSbGlibaztmyLvnLY";
+        e_fb_binaryversion="AcJV1QyOchxrbNKcMr0pFWuBD4B3GLFFQIDxoDl3dzACi6egmk2Anuj0garQoKkwsY4IYWGXJoZr-WYoLviBuXZKUPvPkBUNdEI";
+        e_proxy="AcKt1lbkNBXKomuJ6Zv9Vd0c56zcgYS2VV4BV_62hAme9PySEr4-VjwI08wS9Elvm840AFMeBzGrJTlxHzRy",
+        http_request_error; e_clientaddr="AcJl7Po9qxClYxgwS_pIQisXXKrfyPPbcMILt4C3cOOUETXP2SS1rvlHF0-_9VI81t-zNRrvahOQ9Rr3Bg";
+        e_fb_vipport="AcJgKcdFJWL-_uS16KannS-9ywttYjhiHcljIsDMWLeKNZKP_3wd7hpH-4Qf";
+        e_upip="AcIy_ueXA1_HVeaqpX3CE1703wEW7oaNr_u1QWF2ahQmzYo6nDVc3uV4OqUm51heY_q37VsbZqJUQ0C43p4EkRQPwx_-R6HmEA";
+        e_fb_hostheader="AcKtfgX3i3yNyjqacuODAhtXV2wbNKUe9nJpRFSe0fMK_Bbv6ejzpZoiXfSs-mQrNiDA2CvOK_xaP4HP";
+        e_fb_vipaddr="AcKBY1AGueJCxn6SkMZcPY2pNrY_GZYaWgUjtW5zB0QhyLK1BOuXYy2H37FtdhaQuYMIYQ";
+        e_fb_requesthandler="AcJd36m9_rleX7uME0yoV5hKP36ueQAnLK4o3qQJPK_UPaR8WTJAy89gp-JAf6a3Vv5drINR5YI";
+        e_fb_builduser="AcJ8nU2Lha17-iWIz3hhmDY1_6DWrpBpVDTrzldFsZzEApOzPM3jxHa17g7gT2BJ60U";
+        e_fb_binaryversion="AcKhVZ85fB74oJsyOwXOyx_25BjZ4gWyEaSGi6zjf74SDNS976M4Wq9clptgh75zve1053-MUB-3pPDZchbkPb18gseNRy6SeBE";
+        e_proxy="AcL91iJiN5eay6OCDeLD5EMi7v4CqjJvOOfnMGrX1wZQf5Z5Xb8Lya7v1Esq0I57oB9O6a-YNMPwHz4"
+      Alt-Svc:
+      - h3=":443"; ma=86400
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '152'
+    body:
+      encoding: UTF-8
+      string: '{"error":{"message":"Invalid OAuth access token - Cannot parse access
+        token","type":"OAuthException","code":190,"fbtrace_id":"A0hMhmDD8CzL7rIy3hpfos0"}}'
+  recorded_at: Sun, 24 Dec 2023 16:47:46 GMT
 recorded_with: VCR 6.2.0
