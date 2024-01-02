@@ -11,7 +11,6 @@ module FlyHii
 
     # use Rack::MethodOverride # for other HTTP verbs (with plugin all_verbs)
 
-    # rubocop:disable Metrics/BlockLength,Lint/RedundantCopDisableDirective,Lint/MissingCopEnableDirective
     route do |routing|
       response['Content-Type'] = 'application/json'
 
@@ -52,9 +51,9 @@ module FlyHii
               response.status = http_response.http_status_code
 
               # TODO: change
-              Representer::ProjectFolderContributions.new(
-                result.value!.message
-              ).to_json
+              # Representer::ProjectFolderContributions.new(
+              #   result.value!.message
+              # ).to_json
             end
 
             # POST /posts/{hashtag_name}
@@ -78,7 +77,7 @@ module FlyHii
           end
 
           routing.is do
-            # GET /posts?list={base64_json_array_of_project_fullnames}
+            # GET /posts?list={base64_json_array_of_post_fullnames}
             routing.get do
               list_req = Request::EncodedPostList.new(routing.params)
               result = Service::ListPosts.new.call(list_request: list_req)

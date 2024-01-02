@@ -2,7 +2,7 @@
 
 module FlyHii
   module Response
-    # List of posts
+    # List posts
     PostsList = Struct.new(:posts)
   end
 end

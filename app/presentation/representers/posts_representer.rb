@@ -7,11 +7,12 @@ require_relative 'post_representer'
 
 module FlyHii
   module Representer
-    # Represents list of projects for API output
+    # Represents list of posts for API output
     class PostsList < Roar::Decorator
       include Roar::JSON
 
-      collection :posts, extend: Representer::Post
+      collection :posts, extend: Representer::Post,
+                         class: Representer::OpenStructWithLinks
     end
   end
 end

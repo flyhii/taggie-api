@@ -38,15 +38,15 @@ jobs:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
 
       - name: Setup test database
-        env: # define secrets in Github project -> settings -> secrets
+        env: # define secrets in Instagram -> settings -> secrets
             DB_FILENAME: ${{ secrets.DB_FILENAME }}
         run: RACK_ENV=test bundle exec rake db:migrate
 
       - name: Run all specs
-        env: # define secrets in Github project -> settings -> secrets
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        env: # define secrets in Instagram -> settings -> secrets
+          INSTAGRAM_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
+          ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
           DB_FILENAME: ${{ secrets.DB_FILENAME }}
-          REPOSTORE_PATH: ${{ secrets.REPOSTORE_PATH }}
           API_HOST: ${{ secrets.API_HOST }}
           CLONE_QUEUE_URL: ${{ secrets.CLONE_QUEUE_URL }}
           AWS_REGION: ${{ secrets.AWS_REGION }}

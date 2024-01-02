@@ -6,7 +6,7 @@ require 'roar/json'
 # Represents essential Repo information for API output
 module FlyHii
   module Representer
-    # Represent a Project entity as Json
+    # Represent a Post entity as Json
     class Post < Roar::Decorator
       include Roar::JSON
       include Roar::Hypermedia

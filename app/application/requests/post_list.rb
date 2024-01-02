@@ -39,7 +39,7 @@ module FlyHii
         Base64.urlsafe_encode64(list.to_json)
       end
 
-      # Use in tests to create a ProjectList object from a list
+      # Use in tests to create a PostList object from a list
       def self.to_request(list)
         EncodedPostList.new('list' => to_encoded(list))
       end

@@ -2,7 +2,7 @@
 
 module FlyHii
   module Response
-    # Contributions for a folder of a project
-    HashtagRankingList = Struct.new(:hashtags)
+    # List hashtags ranking
+    HashtagRankingList = Struct.new(:hashtag_name)
   end
 end
