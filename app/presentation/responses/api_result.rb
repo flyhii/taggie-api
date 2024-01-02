@@ -16,6 +16,9 @@ module FlyHii
     # Response object for any operation result
     ApiResult = Struct.new(:status, :message) do
       def initialize(status:, message:)
+        puts '5'
+        # puts status
+        # puts message
         raise(ArgumentError, 'Invalid status') unless CODES.include? status
 
         super(status, message)

@@ -12,8 +12,7 @@ module FlyHii
       include Roar::JSON
 
       property :rank
-      collection :hashtags, extend: Representer::Hashtag,
-                            class: Struct
+      collection :hashtags, extend: Representer::Hashtag, class: OpenStruct
     end
   end
 end

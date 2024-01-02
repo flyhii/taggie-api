@@ -4,7 +4,7 @@ require 'dry/transaction'
 
 module FlyHii
   module Service
-    # Retrieves array of all listed project entities
+    # Retrieves array of all listed post entities
     class ListPost
       include Dry::Transaction
 

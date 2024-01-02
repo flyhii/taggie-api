@@ -16,7 +16,7 @@ module FlyHii
         @folder_name ||= @path.empty? ? '' : @path[1..]
       end
 
-      def project_fullname
+      def post_fullname
         @request.captures.join '/'
       end
     end

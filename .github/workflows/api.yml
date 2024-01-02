@@ -1,0 +1,57 @@
+# API testing workflow config for CI/CD on Github
+
+name: API continuous integration
+
+# Controls when the action will run. 
+on:
+  # Triggers the workflow for main branch on git push
+  push:
+    branches: [main]
+  # Triggers workflow for or any branch on pull requests
+  pull_request:
+    branches:
+      - '**'
+  # Allows running this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow is defined of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "api_test"
+  api_test:
+    strategy:
+      # don't cancel other jobs if one fails
+      fail-fast: false
+      # maximum number of jobs that can run simultaneously
+      max-parallel: 1
+      matrix:
+        os: [ubuntu, macos]
+    runs-on: ${{ matrix.os }}-latest  # Runs on latest builds of matrix OSes
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+    
+      # Builds on a predefined action that has Ruby installed 
+      - uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true # runs 'bundle install' and caches installed gems automatically
+
+      - name: Setup test database
+        env: # define secrets in Instagram -> settings -> secrets
+            DB_FILENAME: ${{ secrets.DB_FILENAME }}
+        run: RACK_ENV=test bundle exec rake db:migrate
+
+      - name: Run all specs
+        env: # define secrets in Instagram -> settings -> secrets
+          INSTAGRAM_TOKEN: ${{ secrets.INSTAGRAM_TOKEN }}
+          ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
+          DB_FILENAME: ${{ secrets.DB_FILENAME }}
+          API_HOST: ${{ secrets.API_HOST }}
+          CLONE_QUEUE_URL: ${{ secrets.CLONE_QUEUE_URL }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: |
+          rake worker:run:test &
+          bundle exec rake spec
