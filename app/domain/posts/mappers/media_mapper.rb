@@ -15,8 +15,12 @@ module FlyHii
       end
 
       def find(hashtag_name)
+        puts '4'
+        puts hashtag_name
         hashtag_id = get_hashtag_id(hashtag_name)
+        puts hashtag_id
         @posts = get_media_content(hashtag_id)
+        puts @posts
         build_entity
       end
 

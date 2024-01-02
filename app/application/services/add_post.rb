@@ -17,23 +17,22 @@ module FlyHii
       IG_NOT_FOUND_MSG = 'Could not find that post on Instagram'
 
       def find_hashtag_name(input)
-        if (post = post_in_database(input))
-          input[:local_post] = post
-        else
-          input[:remote_post] = post_from_instagram(input)
-        end
+        puts input[:hashtag_name]
+        input[:Instagram_posts] = post_from_instagram(input[:hashtag_name])
+
         Success(input)
       rescue StandardError => e
         Failure(Response::ApiResult.new(status: :not_found, message: e.to_s))
       end
 
       def store_post(input)
-        post =
-          if (new_po = input[:remote_post])
-            Repository::For.entity(new_po).create(new_po)
-          else
-            input[:local_post]
-          end
+        puts '9'
+        new_po = input[:Instagram_posts]
+        puts new_po
+
+        puts post = new_po.map do |new_post|
+          Repository::For.entity(new_post).create(new_post)
+        end
         Success(Response::ApiResult.new(status: :created, message: post))
       rescue StandardError
         # App.logger.error("ERROR: #{e.inspect}")
@@ -43,6 +42,8 @@ module FlyHii
       # Support methods for steps
 
       def post_from_instagram(input)
+        puts '66'
+        puts input
         FlyHii::Instagram::MediaMapper
           .new(App.config.INSTAGRAM_TOKEN, App.config.ACCOUNT_ID)
           .find(input)
@@ -50,10 +51,10 @@ module FlyHii
         raise IG_NOT_FOUND_MSG
       end
 
-      def post_in_database(input)
-        Repository::For.klass(Entity::Post)
-          .find_full_name(input)
-      end
+      # def post_in_database(input)
+      #   Repository::For.klass(Entity::Post)
+      #     .find_full_name(input)
+      # end
     end
   end
 end

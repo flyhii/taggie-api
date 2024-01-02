@@ -30,8 +30,13 @@ module FlyHii
       routing.on 'api/v1' do
         routing.on 'posts' do
           routing.on String do |hashtag_name|
+            puts '7'
             # GET /posts/{hashtag_name}
             routing.get do
+              App.configure :production do
+                response.cache_control public: true, max_age: 300
+              end
+
               path_request = Request::PostPath.new(
                 hashtag_name, request
               )
@@ -54,16 +59,19 @@ module FlyHii
 
             # POST /posts/{hashtag_name}
             routing.post do
+              puts '6'
               result = Service::AddPost.new.call(
                 hashtag_name:
               )
 
               if result.failure?
                 failed = Representer::HttpResponse.new(result.failure)
+                puts failed.http_status_code
                 routing.halt failed.http_status_code, failed.to_json
               end
-
               http_response = Representer::HttpResponse.new(result.value!)
+              puts http_response.http_status_code
+              puts result.value!.message
               response.status = http_response.http_status_code
               Representer::POST.new(result.value!.message).to_json
             end
