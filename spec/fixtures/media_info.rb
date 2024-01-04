@@ -22,6 +22,12 @@ def call_ig_url(config, hashtag_id)
   HTTParty.get(url).parsed_response['data']
 end
 
+def call_ig_recent_url(config, hashtag_id)
+  url = "#{API_IG_ROOT}/#{hashtag_id}/recent_media?user_id=#{config['ACCOUNT_ID']}&fields=#{FIELDS}&access_token=#{config['INSTAGRAM_TOKEN']}" # rubocop:disable Layout/LineLength
+  # HTTParty.get(url)
+  HTTParty.get(url).parsed_response['data']
+end
+
 ig_response = {}
 ig_results = {}
 

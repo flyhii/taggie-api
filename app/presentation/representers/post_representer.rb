@@ -14,6 +14,7 @@ module FlyHii
 
       property :remote_id
       property :caption
+      property :tags
       property :comments_count
       property :like_count
       property :timestamp

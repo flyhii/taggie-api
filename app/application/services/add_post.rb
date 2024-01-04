@@ -15,6 +15,7 @@ module FlyHii
 
       DB_ERR_MSG = 'Having trouble accessing the database'
       IG_NOT_FOUND_MSG = 'Could not find that post on Instagram'
+      RECENT_IG_NOT_FOUND_MSG = 'Could not find that recent post on Instagram'
 
       def find_hashtag_name(input)
         puts input[:hashtag_name]
@@ -49,6 +50,15 @@ module FlyHii
           .find(input)
       rescue StandardError
         raise IG_NOT_FOUND_MSG
+      end
+
+      def recent_post_from_instagram(input)
+        puts 'recent66'
+        FlyHii::Instagram::RecentMediaMapper
+          .new(App.config.INSTAGRAM_TOKEN, App.config.ACCOUNT_ID)
+          .find(input)
+      rescue StandardError
+        raise RECENT_IG_NOT_FOUND_MSG
       end
 
       # def post_in_database(input)
