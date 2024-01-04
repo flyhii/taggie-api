@@ -70,9 +70,15 @@ module FlyHii
               end
               http_response = Representer::HttpResponse.new(result.value!)
               puts http_response.http_status_code
-              puts result.value!.message
+              puts "value = #{result.value!.message.first}"
+              puts '111'
               response.status = http_response.http_status_code
-              Representer::POST.new(result.value!.message).to_json
+              # Representer::Post.new(result.value!.message.first).to_json
+              result.value!.message.map do |post|
+                puts "t = #{post.tags}"
+                puts 'p'
+                Representer::Post.new(post).to_json
+              end
             end
           end
 

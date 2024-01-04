@@ -19,7 +19,7 @@ module FlyHii
 
       def find_hashtag_name(input)
         puts input[:hashtag_name]
-        input[:Instagram_posts] = post_from_instagram(input[:hashtag_name])
+        puts input[:Instagram_posts] = post_from_instagram(input[:hashtag_name])
 
         Success(input)
       rescue StandardError => e

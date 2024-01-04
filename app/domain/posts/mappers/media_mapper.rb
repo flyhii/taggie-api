@@ -67,7 +67,8 @@ module FlyHii
         end
 
         def tags
-          @data['caption'].scan(/#([^\s]+)/).flatten.join(' ')
+          puts "tags = #{@data['caption'].scan(/#([^#\s]+)/).flatten.join(' ')}"
+          @data['caption'].scan(/#([^#\s]+)/).flatten.join(' ')
         end
 
         def comments_count
