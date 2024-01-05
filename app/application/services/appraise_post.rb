@@ -30,6 +30,22 @@ module FlyHii
         Failure(Response::ApiResult.new(status: :internal_error, message: DB_ERR))
       end
 
+      
+      # About processing
+      # Messaging::Queue.new(App.config.CLONE_QUEUE_URL, App.config)
+      #     .send(clone_request_json(input))
+      
+      #     Failure(Response::ApiResult.new(
+      #       status: :processing,
+      #       message: { request_id: input[:request_id], msg: PROCESSING_MSG }
+      #     ))
+
+      # def clone_request_json(input)
+      #   Response::CloneRequest.new(input[:project], input[:request_id])
+      #     .then { Representer::CloneRequest.new(_1) }
+      #     .then(&:to_json)
+      # end
+
       # can skip
       # def clone_remote(input)
       #   gitrepo = GitRepo.new(input[:post])
