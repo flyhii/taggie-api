@@ -12,8 +12,10 @@ module FlyHii
       include Roar::Hypermedia
       include Roar::Decorator::HypermediaConsumer
 
+      property :id
       property :remote_id
       property :caption
+      property :tags
       property :comments_count
       property :like_count
       property :timestamp
@@ -22,13 +24,13 @@ module FlyHii
       # collection :contributors, extend: Representer::Member, class: OpenStruct
 
       link :self do
-        "#{App.config.API_HOST}/api/v1/hashtags/#{hashtag_name}"
+        "#{App.config.API_HOST}/api/v1/posts/#{hashtag_name}"
       end
 
       private
 
       def hashtag_name
-        represented.name
+        represented.id
       end
     end
   end

@@ -6,21 +6,19 @@ module FlyHii
   # Provides access to media data
   module Instagram
     # Data Mapper: Instagram media -> Media entity
-    class MediaMapper
+    class RecentMediaMapper
       def initialize(ig_token, user_id, gateway_class = Instagram::Api)
         @token = ig_token
         @ig_user_id = user_id
         @gateway = gateway_class.new(@token, @ig_user_id)
-        @posts = []
+        @recentposts = []
       end
 
       def find(hashtag_name)
-        puts '4'
-        puts hashtag_name
         hashtag_id = get_hashtag_id(hashtag_name)
-        puts hashtag_id
-        @posts = get_media_content(hashtag_id)
-        puts @posts
+        @recentposts = get_media_content(hashtag_id)
+        puts 'recent'
+        puts @recentposts
         build_entity
       end
 
@@ -29,13 +27,13 @@ module FlyHii
       end
 
       def get_media_content(hashtag_id)
-        media_content = @gateway.media(hashtag_id)
+        media_content = @gateway.recent_post(hashtag_id)
         media_content['data']
       end
 
       def build_entity
-        @posts.map do |post|
-          DataMapper.new(post).build_entity
+        @recentposts.map do |recentpost|
+          DataMapper.new(recentpost).build_entity
         end
       end
 
@@ -46,7 +44,7 @@ module FlyHii
         end
 
         def build_entity
-          Entity::Post.new(
+          Entity::RecentPost.new(
             id: nil,
             remote_id:,
             caption:,
@@ -67,8 +65,7 @@ module FlyHii
         end
 
         def tags
-          puts "tags = #{@data['caption'].scan(/#([^#\s]+)/).flatten.join(' ')}"
-          @data['caption'].scan(/#([^#\s]+)/).flatten.join(' ')
+          @data['caption'].scan(/#([^\s]+)/).flatten.join(' ')
         end
 
         def comments_count

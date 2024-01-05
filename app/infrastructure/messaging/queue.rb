@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# require 'aws-sdk-sqs'
+require 'aws-sdk-sqs'
 
 module FlyHii
   module Messaging

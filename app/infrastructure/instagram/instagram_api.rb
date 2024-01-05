@@ -6,6 +6,7 @@ require 'yaml'
 
 require_relative '../../domain/posts/mappers/hashtag_mapper'
 require_relative '../../domain/posts/mappers/media_mapper'
+require_relative '../../domain/posts/mappers/recent_media_mapper'
 
 module FlyHii
   module Instagram
@@ -29,6 +30,11 @@ module FlyHii
           .media_url(hashtag_id).parsed_response
       end
 
+      def recent_post(hashtag_id)
+        Request.new(API_IG_ROOT, @ig_user_id, @ig_token)
+          .media_recent_url(hashtag_id).parsed_response
+      end
+
       # request url
       class Request
         def initialize(resource_root, ig_user_id, token)
@@ -44,6 +50,11 @@ module FlyHii
 
         def media_url(hashtag_id)
           url = "#{@resource_root}/#{hashtag_id}/top_media?user_id=#{@user_id}&fields=#{FIELDS}&access_token=#{@token}"
+          InstagramApiResponseHandler.handle(url)
+        end
+
+        def media_recent_url(hashtag_id)
+          url = "#{@resource_root}/#{hashtag_id}/recent_media?user_id=#{@user_id}&fields=#{FIELDS}&access_token=#{@token}"
           InstagramApiResponseHandler.handle(url)
         end
       end

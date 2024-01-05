@@ -15,6 +15,9 @@ module VcrHelper
     end
   end
 
+  vcr_config.ignore_hosts 'sqs.us-east-1.amazonaws.com'
+  vcr_config.ignore_hosts 'sqs.ap-northeast-1.amazonaws.com'
+
   # Unavoidable :reek:TooManyStatements for VCR configuration
   def self.configure_vcr_for_instagram(recording: :new_episodes)
     VCR.configure do |config|

@@ -11,6 +11,10 @@ module FlyHii
       @media = media
     end
 
+    def delete
+      @media.delete
+    end
+
     def call
       raise Errors::NoMediaFound if @media.empty?
 
