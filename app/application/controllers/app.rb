@@ -73,16 +73,16 @@ module FlyHii
               puts "value = #{result.value!.message.first}"
               puts '111'
               response.status = http_response.http_status_code
-              # Representer::Post.new(result.value!.message.first).to_json
-              result.value!.message.map do |post|
-                puts "t = #{post.tags}"
-                puts 'p'
-                Representer::Post.new(post).to_json
-              end
+              Representer::Post.new(result.value!.message.first).to_json
+              # puts posts = result.value!.message.map do |post|
+              #   Representer::Post.new(post)
+              # end
+              # Representer::PostsList.new(posts.value!).to_json
             end
           end
 
           routing.is do
+            puts '418 Im a teapot'
             # GET /posts?list={base64_json_array_of_post_fullnames}
             routing.get do
               list_req = Request::EncodedPostList.new(routing.params)

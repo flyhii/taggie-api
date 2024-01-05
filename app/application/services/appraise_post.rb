@@ -16,7 +16,6 @@ module FlyHii
 
       NO_PROJ_ERR = 'Post not found'
       DB_ERR = 'Having trouble accessing the database'
-      # CLONE_ERR = 'Could not clone this project'
       NO_FOLDER_ERR = 'Could not find that folder'
 
       # Steps
@@ -58,6 +57,10 @@ module FlyHii
         [input[:requested].owner_name,
          input[:requested].project_name,
          input[:requested].folder_name].join('/')
+      end
+
+      def log_error(error)
+        App.logger.error [error.inspect, error.backtrace].flatten.join("\n")
       end
     end
   end
