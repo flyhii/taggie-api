@@ -24,7 +24,7 @@ module FlyHii
       # collection :contributors, extend: Representer::Member, class: OpenStruct
 
       link :self do
-        "#{App.config.API_HOST}/api/v1/posts/#{hashtag_name}"
+        "#{App.config.API_HOST}/api/v1/posts/hashtag=#{hashtag_name}"
       end
 
       private

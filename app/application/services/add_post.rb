@@ -32,8 +32,6 @@ module FlyHii
         # puts new_po
 
         post = new_po.map do |new_post|
-          puts '10000'
-          puts new_post
           Repository::For.entity(new_post).create(new_post)
         end
         Success(Response::ApiResult.new(status: :created, message: post))

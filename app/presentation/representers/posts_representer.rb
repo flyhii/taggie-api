@@ -11,8 +11,7 @@ module FlyHii
     class PostsList < Roar::Decorator
       include Roar::JSON
 
-      collection :posts, extend: Representer::Post,
-                         class: Representer::OpenStructWithLinks
+      collection :posts, extend: Representer::Post, class: OpenStruct
     end
   end
 end
