@@ -38,6 +38,7 @@ gem 'dry-types', '~> 1.0'
 # Networking
 gem 'http', '~> 5.0'
 gem 'httparty'
+gem 'nokogiri'
 
 # Database
 gem 'hirb'
