@@ -62,6 +62,10 @@ module FlyHii
               result = Service::AddPost.new.call(
                 hashtag_name:
               )
+              result_rank = Service::RankHashtags.new.call(
+                hashtag_name:
+              )
+              puts result_rank
 
               if result.failure?
                 failed = Representer::HttpResponse.new(result.failure)

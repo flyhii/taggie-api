@@ -29,9 +29,11 @@ module FlyHii
       def store_post(input)
         puts '9'
         new_po = input[:Instagram_posts]
-        puts new_po
+        # puts new_po
 
-        puts post = new_po.map do |new_post|
+        post = new_po.map do |new_post|
+          puts '10000'
+          puts new_post
           Repository::For.entity(new_post).create(new_post)
         end
         Success(Response::ApiResult.new(status: :created, message: post))
