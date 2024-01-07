@@ -20,8 +20,6 @@ module FlyHii
       property :like_count
       property :timestamp
       property :media_url
-      # property :owner, extend: Representer::Member, class: OpenStruct
-      # collection :contributors, extend: Representer::Member, class: OpenStruct
 
       link :self do
         "#{App.config.API_HOST}/api/v1/posts/hashtag=#{hashtag_name}"

@@ -27,9 +27,11 @@ module FlyHii
       end
 
       def ranked_hashtags(input)
-        input[:ranked_hashtags] = ranking(input)
+        hashtags_counts = ranking(input)
 
-        Success(input)
+        input[:ranked_hashtags] = hashtags_counts.sort_by { |_tag, count| -count }[1..3].to_h.keys
+
+        Success(Response::ApiResult.new(status: :created, message: input[:ranked_hashtags]))
       rescue StandardError
         App.logger.error "Could not find: #{input[:hashtag_name]}"
         Failure(Response::ApiResult.new(status: :not_found, message: RK_ERR))
@@ -44,9 +46,7 @@ module FlyHii
       end
 
       def ranking(input)
-        puts 'ranking'
         hashtags_counts = Hash.new(0)
-
         hashtag_array = input[:local_post].map do |post|
           post.tags.split
         end
@@ -54,10 +54,9 @@ module FlyHii
         hashtag_array.flatten.each do |tag|
           hashtags_counts[tag] += 1
         end
-
-        top_3_hashtag = hashtags_counts.sort_by { |_tag, count| -count }[1..3].to_h.keys
-        puts "top_3_hashtag: #{top_3_hashtag}"
-        top_3_hashtag
+        hashtags_counts
+      rescue StandardError
+        raise IG_NOT_FOUND_MSG
       end
     end
   end

@@ -11,8 +11,7 @@ module FlyHii
     class RankedHashtags < Roar::Decorator
       include Roar::JSON
 
-      property :rank
-      collection :hashtags, extend: Representer::Hashtag, class: OpenStruct
+      property :ranked_hashtags
     end
   end
 end

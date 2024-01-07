@@ -27,14 +27,16 @@ module FlyHii
       end
 
       def store_post(input)
-        puts '9'
         new_po = input[:Instagram_posts]
-        # puts new_po
 
-        post = new_po.map do |new_post|
+        new_po.map do |new_post|
           Repository::For.entity(new_post).create(new_post)
         end
-        Success(Response::ApiResult.new(status: :created, message: post))
+        Repository::For.klass(Entity::Post).find_full_name
+          .then { |posts| Entity::PostsList.new(posts) }
+          .then { |list| Response::ApiResult.new(status: :ok, message: list) }
+          .then { |result| Success(result) }
+        # Success(post)
       rescue StandardError
         # App.logger.error("ERROR: #{e.inspect}")
         Failure(Response::ApiResult.new(status: :internal_error, message: DB_ERR_MSG))

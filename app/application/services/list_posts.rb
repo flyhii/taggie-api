@@ -26,8 +26,10 @@ module FlyHii
       end
 
       def retrieve_post(input)
-        Repository::For.klass(Entity::Post).find_full_names(input[:list])
-          .then { |post| Response::PostsList.new(post) }
+        puts "2000"
+        puts input[:list]
+        Repository::For.klass(Entity::Post).find_full_name(input[:list])
+          .then { |posts| Response::PostsList.new(posts) }
           .then { |list| Response::ApiResult.new(status: :ok, message: list) }
           .then { |result| Success(result) }
       rescue StandardError

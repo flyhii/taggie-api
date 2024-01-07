@@ -25,6 +25,15 @@ module FlyHii
         end
       end
 
+      def self.find_full
+        puts 'find_full'
+        db_info = Database::MediaOrm.limit(2).all
+        db_info.map do |db_post|
+          puts "db_post=#{db_post}"
+          rebuild_entity(db_post)
+        end
+      end
+
       # def self.find_id(id)
       #   db_record = Database::MediaOrm.first(id:)
       #   rebuild_entity(db_record)
