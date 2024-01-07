@@ -75,7 +75,8 @@ module FlyHii
               http_response = Representer::HttpResponse.new(result.value!)
               puts http_response.http_status_code
               puts "value = #{result.value!.message}"
-              puts response.status = http_response.http_status_code
+              puts '111'
+              response.status = http_response.http_status_code
 
               # all_post = result.value!.message.map do |post|
               #   Representer::Post.new(post)
@@ -91,6 +92,7 @@ module FlyHii
             puts '418 Im a teapot'
             # GET /posts?list={base64_json_array_of_post_fullnames}
             routing.get do
+              puts '418 Im a teapot toooo'
               list_req = Request::EncodedPostList.new(routing.params)
               result = Service::ListPosts.new.call(list_request: list_req)
 
