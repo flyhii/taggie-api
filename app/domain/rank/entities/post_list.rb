@@ -2,7 +2,7 @@
 
 module FlyHii
   module Entity
-    # List of projects
+    # List of posts
     PostsList = Struct.new(:posts)
   end
 end
