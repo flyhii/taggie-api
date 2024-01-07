@@ -71,23 +71,25 @@ module FlyHii
 
               puts result.value!.message
 
-              recent_result = Service::AddRecentPost.new.call(
-                hashtag_name:
-              )
-              puts 'recentresult'
-              if recent_result.failure?
-                failed = Representer::HttpResponse.new(recent_result.failure)
-                puts failed.http_status_code
-                routing.halt failed.http_status_code, failed.to_json
-              end
-              http_response = Representer::HttpResponse.new(recent_result.value!)
-              puts http_response.http_status_code
-              puts '699'
-              response.status = http_response.http_status_code
+              # recent_result = Service::AddRecentPost.new.call(
+              #   hashtag_name:
+              # )
+              # puts 'recentresult'
+              # if recent_result.failure?
+              #   failed = Representer::HttpResponse.new(recent_result.failure)
+              #   puts failed.http_status_code
+              #   routing.halt failed.http_status_code, failed.to_json
+              # end
+              # http_response = Representer::HttpResponse.new(recent_result.value!)
+              # puts http_response.http_status_code
+              # puts '699'
+              # response.status = http_response.http_status_code
               # post_lists.to_json
               # binding.irb
+              # puts result.value!.message
+              # puts recent_result.value!.message
               Representer::PostsList.new(result.value!.message).to_json
-              Representer::RecentPostsList.new(recent_result.value!.message).to_json
+              # Representer::RecentPostsList.new(recent_result.value!.message).to_json
             end
           end
 

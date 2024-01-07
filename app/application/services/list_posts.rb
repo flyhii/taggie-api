@@ -13,7 +13,8 @@ module FlyHii
 
       private
 
-      DB_ERR = 'Cannot access database'
+      # DB_ERR = 'Cannot access database'
+      DB_ERR = ''
 
       # Expects list of movies in input[:list_request]
       def validate_list(input)
