@@ -32,9 +32,9 @@ module FlyHii
             # GET /posts/{hashtag_name}
             routing.get do
               puts '8'
-              # App.configure :production do
-              #   response.cache_control public: true, max_age: 300
-              # end
+              App.configure :production do
+                response.cache_control public: true, max_age: 300
+              end
               puts 'Are you a teapot?'
               result_rank = Service::RankHashtags.new.call(
                 hashtag_name:
