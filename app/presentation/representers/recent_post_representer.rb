@@ -7,7 +7,7 @@ require 'roar/json'
 module FlyHii
   module Representer
     # Represent a Post entity as Json
-    class Post < Roar::Decorator
+    class RecentPost < Roar::Decorator
       include Roar::JSON
       include Roar::Hypermedia
       include Roar::Decorator::HypermediaConsumer

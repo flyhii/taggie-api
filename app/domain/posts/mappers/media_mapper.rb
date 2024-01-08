@@ -67,7 +67,7 @@ module FlyHii
         end
 
         def tags
-          puts "tags = #{@data['caption'].scan(/#([^#\s]+)/).flatten.join(' ')}"
+          # puts "tags = #{@data['caption'].scan(/#([^#\s]+)/).flatten.join(' ')}"
           @data['caption'].scan(/#([^#\s]+)/).flatten.join(' ')
         end
 

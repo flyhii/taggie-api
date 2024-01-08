@@ -3,15 +3,15 @@
 require 'roar/decorator'
 require 'roar/json'
 
-require_relative 'post_representer'
+require_relative 'recent_post_representer'
 
 module FlyHii
   module Representer
     # Represents list of projects for API output
-    class PostsList < Roar::Decorator
+    class RecentPostsList < Roar::Decorator
       include Roar::JSON
 
-      collection :posts, extend: Post, class: OpenStruct
+      collection :recentposts, extend: RecentPost, class: OpenStruct
     end
   end
 end

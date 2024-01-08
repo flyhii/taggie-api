@@ -33,6 +33,9 @@ module FlyHii
     end
 
     configure :production do
+      puts 'RUNNING IN PRODUCTION MODE'
+      # Set DATABASE_URL environment variable on production platform
+      
       use Rack::Cache,
           verbose: true,
           metastore: "#{config.REDIS_URL}/0/metastore",

@@ -5,7 +5,7 @@ require 'dry/transaction'
 module FlyHii
   module Service
     # Transaction to store post from Instagram API to database
-    class AddPost
+    class AddRecentPost
       include Dry::Transaction
 
       step :find_hashtag_name
@@ -14,12 +14,11 @@ module FlyHii
       private
 
       DB_ERR_MSG = 'Having trouble accessing the database'
-      IG_NOT_FOUND_MSG = 'Could not find that post on Instagram'
       RECENT_IG_NOT_FOUND_MSG = 'Could not find that recent post on Instagram'
 
       def find_hashtag_name(input)
         puts input[:hashtag_name]
-        puts input[:Instagram_posts] = post_from_instagram(input[:hashtag_name])
+        puts input[:Instagram_posts] = recent_post_from_instagram(input[:hashtag_name])
 
         Success(input)
       rescue StandardError => e
@@ -32,26 +31,15 @@ module FlyHii
         new_po.map do |new_post|
           Repository::For.entity(new_post).create(new_post)
         end
-        Repository::For.klass(Entity::Post).find_full_name
-          .then { |posts| Entity::PostsList.new(posts) }
+
+        Repository::For.klass(Entity::RecentPost).find_full_name
+          .then { |posts| Entity::RecentPostsList.new(posts) }
           .then { |list| Response::ApiResult.new(status: :ok, message: list) }
           .then { |result| Success(result) }
         # Success(post)
       rescue StandardError
         # App.logger.error("ERROR: #{e.inspect}")
         Failure(Response::ApiResult.new(status: :internal_error, message: DB_ERR_MSG))
-      end
-
-      # Support methods for steps
-
-      def post_from_instagram(input)
-        puts '66'
-        puts input
-        FlyHii::Instagram::MediaMapper
-          .new(App.config.INSTAGRAM_TOKEN, App.config.ACCOUNT_ID)
-          .find(input)
-      rescue StandardError
-        raise IG_NOT_FOUND_MSG
       end
 
       def recent_post_from_instagram(input)
@@ -62,11 +50,6 @@ module FlyHii
       rescue StandardError
         raise RECENT_IG_NOT_FOUND_MSG
       end
-
-      # def post_in_database(input)
-      #   Repository::For.klass(Entity::Post)
-      #     .find_full_name(input)
-      # end
     end
   end
 end

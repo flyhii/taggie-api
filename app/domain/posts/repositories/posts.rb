@@ -11,13 +11,25 @@ module FlyHii
       end
 
       def self.find(entity)
+        puts 'find'
         find_remote_id(entity.remote_id)
       end
 
       def self.find_full_name
+        puts 'find_full_name'
         db_info = Database::MediaOrm.all
         # TODO: find_full_name for app/controller
         db_info.map do |db_post|
+          puts "db_post=#{db_post}"
+          rebuild_entity(db_post)
+        end
+      end
+
+      def self.find_full
+        puts 'find_full'
+        db_info = Database::MediaOrm.limit(2).all
+        db_info.map do |db_post|
+          puts "db_post=#{db_post}"
           rebuild_entity(db_post)
         end
       end
@@ -53,13 +65,12 @@ module FlyHii
         end
 
         def create_post
-          puts @entity.remote_id
           Database::MediaOrm.create(@entity.to_attr_hash)
         end
 
         def call
-          Hashtags.db_find_or_create(@entity.tags)
           create_post
+          # Hashtags.db_find_or_create(@entity.tags)
           # create_post.tap do |db_post|
           #   db_post.update(tags:)
           # end
