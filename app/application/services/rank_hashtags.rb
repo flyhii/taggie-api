@@ -28,10 +28,10 @@ module FlyHii
 
       def ranked_hashtags(input)
         hashtags_counts = ranking(input)
-
-        input[:ranked_hashtags] = hashtags_counts.sort_by { |_tag, count| -count }[1..3].to_h.keys
-
-        Success(Response::ApiResult.new(status: :created, message: input[:ranked_hashtags]))
+        ranked_hashtags = hashtags_counts.sort_by { |_tag, count| -count }[1..3].to_h.keys
+        Response::HashtagRankingList.new(ranked_hashtags)
+          .then { |list| Response::ApiResult.new(status: :ok, message: list) }
+          .then { |result| Success(result) }
       rescue StandardError
         App.logger.error "Could not find: #{input[:hashtag_name]}"
         Failure(Response::ApiResult.new(status: :not_found, message: RK_ERR))

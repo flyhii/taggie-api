@@ -3,6 +3,6 @@
 module FlyHii
   module Response
     # List hashtags ranking
-    HashtagRankingList = Struct.new(:hashtag_name)
+    HashtagRankingList = Struct.new(:ranked_hashtags)
   end
 end

@@ -60,9 +60,6 @@ module FlyHii
         def call
           Hashtags.db_find_or_create(@entity.tags)
           create_post
-          # create_post.tap do |db_post|
-          #   db_post.update(tags:)
-          # end
         end
       end
     end
