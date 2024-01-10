@@ -19,6 +19,7 @@ module FlyHii
       attribute :like_count,      Strict::Integer.optional
       attribute :timestamp,       Strict::Time
       attribute :media_url,       Strict::String.optional
+      attribute :trans_caption,   Strict::String.optional
 
       def to_attr_hash
         # to_hash.reject { |key, _| %i[id owner contributors].include? key }

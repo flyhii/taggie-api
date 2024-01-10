@@ -54,7 +54,8 @@ module FlyHii
             comments_count:,
             like_count:,
             timestamp:,
-            media_url:
+            media_url:,
+            trans_caption:
           )
         end
 
@@ -85,6 +86,10 @@ module FlyHii
 
         def media_url
           @data['media_url']
+        end
+
+        def trans_caption
+          @data = nil
         end
       end
     end
