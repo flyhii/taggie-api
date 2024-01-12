@@ -20,7 +20,8 @@ module FlyHii
 
       def self.rebuild_value(db_record)
         return nil unless db_record
-        # puts "db_record: #{db_record}"
+
+        puts "db_record: #{db_record}"
         Value::Hashtag.new(
           hashtag_name: db_record
         )
@@ -36,11 +37,12 @@ module FlyHii
       def self.db_find_or_create(value)
         # puts "value: #{value}"
         tags = value.split
-        all_tags = rebuild_many(tags)
+        # all_tags = rebuild_many(tags)
         # puts "tags: #{all_tags}"
-        all_tags.map do |hashtag|
-          # puts hashtag
-          # Database::HashtagOrm.create(hashtag)
+        tags.map do |hashtag|
+          hashtag_value = rebuild_value(hashtag)
+          puts hashtag_value
+          Database::HashtagOrm.find_or_create(hashtag_value.to_attr_hash)
         end
       end
     end

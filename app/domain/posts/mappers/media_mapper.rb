@@ -45,7 +45,7 @@ module FlyHii
           @data = data
         end
 
-        def build_entity
+        def build_entity # rubocop:disable Metrics/MethodLength
           Entity::Post.new(
             id: nil,
             remote_id:,
@@ -55,7 +55,7 @@ module FlyHii
             like_count:,
             timestamp:,
             media_url:,
-            trans_caption:
+            trans_caption: nil
           )
         end
 
@@ -88,9 +88,9 @@ module FlyHii
           @data['media_url']
         end
 
-        def trans_caption
-          @data = nil
-        end
+        # def trans_caption
+        #   @data = nil
+        # end
       end
     end
   end

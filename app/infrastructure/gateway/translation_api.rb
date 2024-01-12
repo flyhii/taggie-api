@@ -18,7 +18,7 @@ module FlyHii
 
       def translation(target_language, content)
         Request.new(API_GOOGLE_ROOT, @google_token)
-               .translation_url(target_language, content)
+          .translation_url(target_language, content)
       end
 
       # request url

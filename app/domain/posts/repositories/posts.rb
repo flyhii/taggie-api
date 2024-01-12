@@ -70,7 +70,12 @@ module FlyHii
 
         def call
           create_post
-          # Hashtags.db_find_or_create(@entity.tags)
+          puts 'is there a tag?'
+          puts @entity.tags
+          return if @entity.tags.nil?
+          puts @entity.tags
+          Hashtags.db_find_or_create(@entity.tags)
+          puts 'hashtag added to db'
           # create_post.tap do |db_post|
           #   db_post.update(tags:)
           # end
