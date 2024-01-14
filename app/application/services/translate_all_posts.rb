@@ -52,12 +52,13 @@ module FlyHii
 
       def translate_posts_from_google(input, all_posts)
         puts '99'
-        all_posts.map do |post|
-          puts post[:caption]
+        all_posts.to_h do |post|
+          # puts post[:caption]
           #   po = post[:caption].split("\n")
-          GoogleTranslate::TransTextMapper
+          translated_caption = GoogleTranslate::TransTextMapper
             .new(App.config.GOOGLE_TOKEN)
             .translate(input, 'Hello, how are you?')
+          [post[:remote_id], translated_caption['data']['translations'][0]['translatedText']]
         end
       rescue StandardError
         raise GOOGLE_NOT_FOUND_MSG
