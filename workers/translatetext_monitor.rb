@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module TranslateText
-  # Infrastructure to clone while yielding progress
+  # Infrastructure to translate while yielding progress
   module TranslateTextMonitor
     SHOW_PROGRESS = {
       'STARTED'   => 15,
