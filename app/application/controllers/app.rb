@@ -97,16 +97,31 @@ module FlyHii
               # Representer::RecentPostsList.new(recent_result.value!.message).to_json
             end
           end
+          
+          routing.on 'translate' do
+            # puts "translateeeeeeeeeeeeeeeee"
+            routing.on String do |language|
+              puts "translateeeeeeeeeeeeeeeee"
+              # POST /api/v1/posts/translate
+              routing.post do
+                language ||= 'en' # Set a default target language if not provided
 
-          routing.on String, String do |hashtag_name, target_language|
-            routing.post do
-              puts '321'
-              trans_caption = Service::TranslateAllPosts.new.call(
-                target_language: 'fr'
-              )
-              puts "translated: #{trans_caption}"
+                result = Service::TranslateAllPosts.new.call(
+                  target_language: language
+                )
+
+                if result.failure?
+                  failed = Representer::HttpResponse.new(result.failure)
+                  routing.halt failed.http_status_code, failed.to_json
+                end
+
+                http_response = Representer::HttpResponse.new(result.value!)
+                response.status = http_response.http_status_code
+                Representer::PostsList.new(result.value!.message).to_json
+              end
             end
           end
+          
 
           routing.is do
             # GET /projects?list={base64_json_array_of_project_fullnames}
