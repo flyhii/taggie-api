@@ -8,20 +8,39 @@ module FlyHii
     #     Database::MediaOrm.all.map { |db_post| rebuild_entity(db_post) }
     #   end
 
-      def self.create(translatedtext)
+      def self.create(translated_result)
         puts 'create'
-        translatedtext.map do |post|
-          puts post['data']['translations'][0]['translatedText']
-          add_translation(post['data']['translations'][0]['translatedText'])
+        puts translated_result
+        translated_result.each do |key, value|
+          puts "key=#{key}"
+          puts "value=#{value}"
+          add_translation(key, value)
         end
       end
 
-      def self.add_translation(entity, translatedtext)
-        find_remote_id(entity.remote_id)
+      def self.add_translation(remote_id, translatedtext)
         db_record = Database::MediaOrm.first(remote_id:)
+        puts "db_record=#{db_record[:caption]}"
         update_entity(db_record, translatedtext)
       end
 
+      def self.update_entity(db_record, translatedtext)
+        puts 'update_entity'
+        puts db_record
+        puts translatedtext
+        db_record.update(trans_caption: translatedtext)
+        puts "Updated translated caption: #{db_record[:trans_caption]}"
+        db_record
+      end
+
+    #   def self.find(entity)
+    #     puts 'find'
+    #     find_remote_id(entity.remote_id)
+    #   end
+
+    #   def self.find_full_name
+    #     puts 'find_full_name'
+    #     db_info = Database::MediaOrm.all
     #   def self.find(entity)
     #     puts 'find'
     #     find_remote_id(entity.remote_id)
