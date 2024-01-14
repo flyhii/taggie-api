@@ -101,9 +101,9 @@ module FlyHii
           routing.on 'translate' do
             # puts "translateeeeeeeeeeeeeeeee"
             routing.on String do |language|
-              puts "translateeeeeeeeeeeeeeeee"
               # POST /api/v1/posts/translate
               routing.post do
+                puts "translateeeeeeeeeeeeeeeee"
                 language ||= 'en' # Set a default target language if not provided
 
                 result = Service::TranslateAllPosts.new.call(
