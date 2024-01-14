@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
+require 'net/http'
 require 'http'
 require 'httparty'
 require 'yaml'
+require 'json'
 
 require_relative '../../domain/translation/mappers/transtext_mapper'
 
@@ -17,6 +19,7 @@ module FlyHii
       end
 
       def translation(target_language, content)
+        puts 'google translate'
         Request.new(API_GOOGLE_ROOT, @google_token)
           .translation_url(target_language, content)
       end
@@ -26,18 +29,35 @@ module FlyHii
         def initialize(resource_root, token)
           @resource_root = resource_root
           @token = token
+          @headers = {
+            'Authorization'       => "Bearer #{`gcloud auth print-access-token`.strip}",
+            'x-goog-user-project' => @token,
+            'Content-Type'        => 'application/json; charset=utf-8'
+          }
         end
 
-        def translation_url(target_language, content)
-          puts url = "#{@resource_root}?target=#{target_language}&key=#{@token}&q=#{content}"
-          GoogleApiResponseHandler.handle(url)
+        def translation_url(target_language, content) # rubocop:disable Metrics/MethodLength
+          url = URI.parse('https://translation.googleapis.com/language/translate/v2')
+          http = Net::HTTP.new(url.host, url.port)
+          http.use_ssl = true if url.scheme == 'https'
+
+          request_data = {
+            'q'      => content,
+            'target' => target_language,
+            'format' => 'text'
+          }
+          request_json = request_data.to_json
+          response = http.post(url.path, request_json, @headers)
+          puts "Response Body: #{response.body}"
+          response.body
+          # GoogleApiResponseHandler.handle(url)
         end
       end
 
       # increase one module to deal with HTTP request
       module HTTPRequestHandler
-        def self.get(url)
-          HTTParty.get(url)
+        def self.post(url)
+          HTTParty.post(url)
         end
       end
 
@@ -45,7 +65,7 @@ module FlyHii
       class GoogleApiResponseHandler
         def self.handle(url)
           # use new HTTPRequestHandler
-          response = HTTPRequestHandler.get(url)
+          response = HTTPRequestHandler.post(url)
 
           Response.new(response).tap do |inner_response|
             raise(inner_response.error) unless inner_response.successful?

@@ -97,13 +97,13 @@ module FlyHii
               # Representer::RecentPostsList.new(recent_result.value!.message).to_json
             end
           end
-          
+
           routing.on 'translate' do
             # puts "translateeeeeeeeeeeeeeeee"
             routing.on String do |language|
               # POST /api/v1/posts/translate
               routing.post do
-                puts "translateeeeeeeeeeeeeeeee"
+                puts 'translateeeeeeeeeeeeeeeee'
                 language ||= 'en' # Set a default target language if not provided
 
                 result = Service::TranslateAllPosts.new.call(
