@@ -8,12 +8,11 @@ module FlyHii
     class TranslateAllPosts
       include Dry::Transaction
 
-    #   step :validate_language
       step :translate_posts
       step :store_post
-    #   step :retrieve_post
 
       private
+
       TR_ERR = 'Translate error'
       DB_ERR_MSG = 'Cannot access database'
       GOOGLE_NOT_FOUND_MSG = 'Could not translate that post on Google'
@@ -50,15 +49,15 @@ module FlyHii
         Failure(Response::ApiResult.new(status: :internal_error, message: DB_ERR_MSG))
       end
 
-      def translate_posts_from_google(input, all_posts)
+      def translate_posts_from_google(input, all_posts) # rubocop:disable Metrics/AbcSize
         puts '99'
         all_posts.to_h do |post|
-          puts post[:caption].to_json
+          puts post[:caption]
           #   po = post[:caption].split("\n")
           translated_caption = GoogleTranslate::TransTextMapper
             .new(App.config.GOOGLE_PROJECT_ID)
-            .translate(input, post[:caption])
-          [post[:remote_id], translated_caption['data']['translations'][0]['translatedText']]
+            .translate(input, post[:caption].to_json)
+          [post[:remote_id], JSON.parse(translated_caption)['data']['translations'][0]['translatedText']]
         end
       rescue StandardError
         raise GOOGLE_NOT_FOUND_MSG
