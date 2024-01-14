@@ -20,7 +20,7 @@ module FlyHii
         hashtag_id = get_hashtag_id(hashtag_name)
         puts hashtag_id
         @posts = get_media_content(hashtag_id)
-        puts @posts
+        # puts @posts
         build_entity
       end
 
