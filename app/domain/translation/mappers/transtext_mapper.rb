@@ -12,7 +12,7 @@ module FlyHii
       end
 
       def translate(target_language, content)
-        # puts @token
+        puts target_language
         @gateway.translation(target_language, content)
       end
     end

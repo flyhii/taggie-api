@@ -41,6 +41,11 @@ module FlyHii
               )
               puts "result_rank: #{result_rank}"
 
+              trans_caption = Service::TranslateAllPosts.new.call(
+                target_language: 'fr'
+              )
+              puts "translated: #{trans_caption}"
+
               if result_rank.failure?
                 failed = Representer::HttpResponse.new(result_rank.failure)
                 routing.halt failed.http_status_code, failed.to_json
@@ -90,6 +95,16 @@ module FlyHii
               # puts recent_result.value!.message
               Representer::PostsList.new(result.value!.message).to_json
               # Representer::RecentPostsList.new(recent_result.value!.message).to_json
+            end
+          end
+
+          routing.on String, String do |hashtag_name, target_language|
+            routing.post do
+              puts '321'
+              trans_caption = Service::TranslateAllPosts.new.call(
+                target_language: 'fr'
+              )
+              puts "translated: #{trans_caption}"
             end
           end
 
