@@ -2,7 +2,7 @@
 
 require_relative 'progress_publisher'
 
-module ShowPost
+module TranslateText
   # Reports job progress to client
   class JobReporter
     attr_accessor :post

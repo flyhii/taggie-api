@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-module ShowPost
+module TranslateText
   # Infrastructure to clone while yielding progress
-  module ShowPostMonitor
+  module TranslateTextMonitor
     SHOW_PROGRESS = {
       'STARTED'   => 15,
       'Calling'   => 30,
