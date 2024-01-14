@@ -53,11 +53,11 @@ module FlyHii
       def translate_posts_from_google(input, all_posts)
         puts '99'
         all_posts.to_h do |post|
-          # puts post[:caption]
+          puts post[:caption].to_json
           #   po = post[:caption].split("\n")
           translated_caption = GoogleTranslate::TransTextMapper
-            .new(App.config.GOOGLE_TOKEN)
-            .translate(input, 'Hello, how are you?')
+            .new(App.config.GOOGLE_PROJECT_ID)
+            .translate(input, post[:caption])
           [post[:remote_id], translated_caption['data']['translations'][0]['translatedText']]
         end
       rescue StandardError

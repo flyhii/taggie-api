@@ -121,27 +121,26 @@ module FlyHii
               end
             end
           end
-          
 
-          routing.is do
-            # GET /projects?list={base64_json_array_of_project_fullnames}
-            routing.get do
-              list_req = Request::EncodedPostList.new(routing.params)
-              puts routing.params
-              puts '7:48'
-              result = Service::ListPost.new.call(list_request: list_req)
+          # routing.is do
+          #   # GET /projects?list={base64_json_array_of_project_fullnames}
+          #   routing.get do
+          #     list_req = Request::EncodedPostList.new(routing.params)
+          #     puts routing.params
+          #     puts '7:48'
+          #     result = Service::ListPost.new.call(list_request: list_req)
 
-              if result.failure?
-                failed = Representer::HttpResponse.new(result.failure)
-                routing.halt failed.http_status_code, failed.to_json
-                puts failed.http_status_code
-              end
+          #     if result.failure?
+          #       failed = Representer::HttpResponse.new(result.failure)
+          #       routing.halt failed.http_status_code, failed.to_json
+          #       puts failed.http_status_code
+          #     end
 
-              http_response = Representer::HttpResponse.new(result.value!)
-              puts response.status = http_response.http_status_code
-              Representer::PostsList.new(result.value!.message).to_json
-            end
-          end
+          #     http_response = Representer::HttpResponse.new(result.value!)
+          #     puts response.status = http_response.http_status_code
+          #     Representer::PostsList.new(result.value!.message).to_json
+          #   end
+          # end
         end
       end
     end
