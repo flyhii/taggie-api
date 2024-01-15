@@ -3,7 +3,7 @@
 require 'http'
 require 'httparty'
 
-module ShowPost
+module TranslateText
   # Publishes progress as percent to Faye endpoint
   class ProgressPublisher
     def initialize(config, channel_id)

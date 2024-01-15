@@ -2,16 +2,17 @@
 
 require_relative 'progress_publisher'
 
-module ShowPost
+module TranslateText
   # Reports job progress to client
   class JobReporter
-    attr_accessor :post
+    attr_accessor :post, :token
 
     def initialize(request_json, config)
       show_request = FlyHii::Representer::ShowRequest
-        .new(OpenStruct.new)
+        .new(OpenStruct.new) # rubocop:disable Style/OpenStructUse
         .from_json(request_json)
 
+      @token = config
       @post = show_request.caption
       @publisher = ProgressPublisher.new(config, show_request.id)
     end

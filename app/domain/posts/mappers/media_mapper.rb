@@ -20,7 +20,7 @@ module FlyHii
         hashtag_id = get_hashtag_id(hashtag_name)
         puts hashtag_id
         @posts = get_media_content(hashtag_id)
-        puts @posts
+        # puts @posts
         build_entity
       end
 
@@ -45,7 +45,7 @@ module FlyHii
           @data = data
         end
 
-        def build_entity
+        def build_entity # rubocop:disable Metrics/MethodLength
           Entity::Post.new(
             id: nil,
             remote_id:,
@@ -54,7 +54,8 @@ module FlyHii
             comments_count:,
             like_count:,
             timestamp:,
-            media_url:
+            media_url:,
+            trans_caption: nil
           )
         end
 
@@ -86,6 +87,10 @@ module FlyHii
         def media_url
           @data['media_url']
         end
+
+        # def trans_caption
+        #   @data = nil
+        # end
       end
     end
   end

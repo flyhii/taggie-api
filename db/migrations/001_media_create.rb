@@ -15,6 +15,7 @@ Sequel.migration do
       Integer     :like_count
       Time        :timestamp
       String      :media_url
+      String      :trans_caption
 
       DateTime :created_at
       DateTime :updated_at

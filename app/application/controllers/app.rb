@@ -28,18 +28,46 @@ module FlyHii
 
       routing.on 'api/v1' do
         routing.on 'posts' do
+          routing.on 'translate' do
+            routing.on String do |language|
+              # POST /api/v1/posts/translate
+              routing.post do
+                puts 'translateeeeeeeeeeeeeeeee'
+                language ||= 'en' # Set a default target language if not provided
+
+                result = Service::TranslateAllPosts.new.call(
+                  target_language: language
+                )
+                puts "translated result: #{result}"
+                if result.failure?
+                  failed = Representer::HttpResponse.new(result.failure)
+                  routing.halt failed.http_status_code, failed.to_json
+                end
+
+                http_response = Representer::HttpResponse.new(result.value!)
+                response.status = http_response.http_status_code
+                Representer::PostsList.new(result.value!.message).to_json
+              end
+            end
+          end
+
           routing.on String do |hashtag_name|
             # GET /posts/{hashtag_name}
             routing.get do
               puts '8'
-              # App.configure :production do
-              #   response.cache_control public: true, max_age: 300
-              # end
+              App.configure :production do
+                response.cache_control public: true, max_age: 300
+              end
               puts 'Are you a teapot?'
               result_rank = Service::RankHashtags.new.call(
                 hashtag_name:
               )
               puts "result_rank: #{result_rank}"
+
+              # trans_caption = Service::TranslateAllPosts.new.call(
+              #   target_language: 'fr'
+              # )
+              # puts "translated: #{trans_caption}"
 
               if result_rank.failure?
                 failed = Representer::HttpResponse.new(result_rank.failure)
@@ -93,25 +121,27 @@ module FlyHii
             end
           end
 
-          routing.is do
-            # GET /projects?list={base64_json_array_of_project_fullnames}
-            routing.get do
-              list_req = Request::EncodedPostList.new(routing.params)
-              puts routing.params
-              puts '7:48'
-              result = Service::ListPost.new.call(list_request: list_req)
+          
 
-              if result.failure?
-                failed = Representer::HttpResponse.new(result.failure)
-                routing.halt failed.http_status_code, failed.to_json
-                puts failed.http_status_code
-              end
+          # routing.is do
+          #   # GET /projects?list={base64_json_array_of_project_fullnames}
+          #   routing.get do
+          #     list_req = Request::EncodedPostList.new(routing.params)
+          #     puts routing.params
+          #     puts '7:48'
+          #     result = Service::ListPost.new.call(list_request: list_req)
 
-              http_response = Representer::HttpResponse.new(result.value!)
-              puts response.status = http_response.http_status_code
-              Representer::PostsList.new(result.value!.message).to_json
-            end
-          end
+          #     if result.failure?
+          #       failed = Representer::HttpResponse.new(result.failure)
+          #       routing.halt failed.http_status_code, failed.to_json
+          #       puts failed.http_status_code
+          #     end
+
+          #     http_response = Representer::HttpResponse.new(result.value!)
+          #     puts response.status = http_response.http_status_code
+          #     Representer::PostsList.new(result.value!.message).to_json
+          #   end
+          # end
         end
       end
     end
