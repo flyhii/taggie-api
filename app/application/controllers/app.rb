@@ -28,6 +28,29 @@ module FlyHii
 
       routing.on 'api/v1' do
         routing.on 'posts' do
+          routing.on 'translate' do
+            routing.on String do |language|
+              # POST /api/v1/posts/translate
+              routing.post do
+                puts 'translateeeeeeeeeeeeeeeee'
+                language ||= 'en' # Set a default target language if not provided
+
+                result = Service::TranslateAllPosts.new.call(
+                  target_language: language
+                )
+                puts "translated result: #{result}"
+                if result.failure?
+                  failed = Representer::HttpResponse.new(result.failure)
+                  routing.halt failed.http_status_code, failed.to_json
+                end
+
+                http_response = Representer::HttpResponse.new(result.value!)
+                response.status = http_response.http_status_code
+                Representer::PostsList.new(result.value!.message).to_json
+              end
+            end
+          end
+
           routing.on String do |hashtag_name|
             # GET /posts/{hashtag_name}
             routing.get do
@@ -41,10 +64,10 @@ module FlyHii
               )
               puts "result_rank: #{result_rank}"
 
-              trans_caption = Service::TranslateAllPosts.new.call(
-                target_language: 'fr'
-              )
-              puts "translated: #{trans_caption}"
+              # trans_caption = Service::TranslateAllPosts.new.call(
+              #   target_language: 'fr'
+              # )
+              # puts "translated: #{trans_caption}"
 
               if result_rank.failure?
                 failed = Representer::HttpResponse.new(result_rank.failure)
@@ -98,29 +121,7 @@ module FlyHii
             end
           end
 
-          routing.on 'translate' do
-            # puts "translateeeeeeeeeeeeeeeee"
-            routing.on String do |language|
-              # POST /api/v1/posts/translate
-              routing.post do
-                puts 'translateeeeeeeeeeeeeeeee'
-                language ||= 'en' # Set a default target language if not provided
-
-                result = Service::TranslateAllPosts.new.call(
-                  target_language: language
-                )
-
-                if result.failure?
-                  failed = Representer::HttpResponse.new(result.failure)
-                  routing.halt failed.http_status_code, failed.to_json
-                end
-
-                http_response = Representer::HttpResponse.new(result.value!)
-                response.status = http_response.http_status_code
-                Representer::PostsList.new(result.value!.message).to_json
-              end
-            end
-          end
+          
 
           # routing.is do
           #   # GET /projects?list={base64_json_array_of_project_fullnames}
