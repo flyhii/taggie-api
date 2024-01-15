@@ -8,7 +8,7 @@ require_app
 require 'figaro'
 require 'shoryuken'
 
-class TranslateText
+module TranslateText
   # Shoryuken worker class to call api in parallel
   class Worker
     # Environment variables setup
