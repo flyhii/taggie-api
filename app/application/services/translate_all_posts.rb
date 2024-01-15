@@ -8,16 +8,8 @@ module FlyHii
     class TranslateAllPosts
       include Dry::Transaction
 
-<<<<<<< HEAD
       step :translate_posts
       step :store_post
-=======
-    # step :validate_language
-      step :request_translate_worker
-      step :translate_posts
-      step :store_post
-    # step :retrieve_post
->>>>>>> bbe86b3 (fix: worker connetion)
 
       private
 
