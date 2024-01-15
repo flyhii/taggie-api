@@ -22,8 +22,6 @@ module FlyHii
 
       def self.update_entity(db_record, translatedtext)
         puts 'update_entity'
-        puts db_record
-        puts translatedtext
         db_record.update(trans_caption: translatedtext)
         puts "Updated translated caption: #{db_record[:trans_caption]}"
         db_record
