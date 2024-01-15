@@ -48,7 +48,7 @@ jobs:
           ACCOUNT_ID: ${{ secrets.ACCOUNT_ID }}
           DB_FILENAME: ${{ secrets.DB_FILENAME }}
           API_HOST: ${{ secrets.API_HOST }}
-          CLONE_QUEUE_URL: ${{ secrets.CLONE_QUEUE_URL }}
+          TRANSLATE_QUEUE_URL: ${{ secrets.TRANSLATE_QUEUE_URL }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

@@ -6,11 +6,11 @@ require 'sequel'
 Sequel.migration do
   change do
     create_table(:hashtag_media) do
-      primary_key [:hashtag_id, :media_id] # rubocop:disable Style/SymbolArray
-      foreign_key :hashtag_id, :hashtags
+      primary_key [:media_id, :hashtag_id] # rubocop:disable Style/SymbolArray
       foreign_key :media_id, :posts
+      foreign_key :hashtag_id, :hashtags
 
-      index [:hashtag_id, :media_id] # rubocop:disable Style/SymbolArray
+      index [:media_id, :hashtag_id] # rubocop:disable Style/SymbolArray
     end
   end
 end

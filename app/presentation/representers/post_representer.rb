@@ -20,6 +20,7 @@ module FlyHii
       property :like_count
       property :timestamp
       property :media_url
+      property :trans_caption
 
       link :self do
         "#{App.config.API_HOST}/api/v1/posts/hashtag=#{hashtag_name}"

@@ -173,7 +173,7 @@ namespace :queues do
       secret_access_key: @api.config.AWS_SECRET_ACCESS_KEY,
       region: @api.config.AWS_REGION
     )
-    @q_name = @api.config.CLONE_QUEUE
+    @q_name = @api.config.TRANSLATE_QUEUE
     @q_url = @sqs.get_queue_url(queue_name: @q_name).queue_url
 
     puts "Environment: #{@api.environment}"
@@ -214,17 +214,17 @@ namespace :worker do
   namespace :run do
     desc 'Run the background cloning worker in development mode'
     task :dev => :config do
-      sh 'RACK_ENV=development bundle exec shoryuken -r ./workers/api_post_worker.rb -C ./workers/shoryuken_dev.yml'
+      sh 'RACK_ENV=development bundle exec shoryuken -r ./workers/text_translate_worker.rb -C ./workers/shoryuken_dev.yml'
     end
 
     desc 'Run the background cloning worker in testing mode'
     task :test => :config do
-      sh 'RACK_ENV=test bundle exec shoryuken -r ./workers/api_post_worker.rb -C ./workers/shoryuken_test.yml'
+      sh 'RACK_ENV=test bundle exec shoryuken -r ./workers/text_translate_worker.rb -C ./workers/shoryuken_test.yml'
     end
 
     desc 'Run the background cloning worker in production mode'
     task :production => :config do
-      sh 'RACK_ENV=production bundle exec shoryuken -r ./workers/api_post_worker.rb -C ./workers/shoryuken.yml'
+      sh 'RACK_ENV=production bundle exec shoryuken -r ./workers/text_translate_worker.rb -C ./workers/shoryuken.yml'
     end
   end
 end

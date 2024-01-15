@@ -33,6 +33,7 @@ gem 'redis-rack-cache', '~> 2.2'
 # Validation
 gem 'dry-struct', '~> 1.0'
 gem 'dry-types', '~> 1.0'
+gem 'google-cloud-translate'
 
 # INFRASTRUCTURE LAYER
 # Networking
