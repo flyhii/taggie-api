@@ -30,11 +30,10 @@ module FlyHii
         Failure(Response::ApiResult.new(status: :internal_error, message: DB_ERR))
       end
 
-      
       # About processing
-      # Messaging::Queue.new(App.config.CLONE_QUEUE_URL, App.config)
+      # Messaging::Queue.new(App.config.TRANSLATE_QUEUE_URL, App.config)
       #     .send(clone_request_json(input))
-      
+
       #     Failure(Response::ApiResult.new(
       #       status: :processing,
       #       message: { request_id: input[:request_id], msg: PROCESSING_MSG }

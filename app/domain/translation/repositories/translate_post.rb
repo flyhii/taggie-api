@@ -16,14 +16,14 @@ module FlyHii
 
       def self.add_translation(remote_id, translatedtext)
         db_record = Database::MediaOrm.first(remote_id:)
-        puts "db_record=#{db_record[:caption]}"
+        # puts "db_record=#{db_record[:caption]}"
         update_entity(db_record, translatedtext)
       end
 
       def self.update_entity(db_record, translatedtext)
         puts 'update_entity'
         db_record.update(trans_caption: translatedtext)
-        puts "Updated translated caption: #{db_record[:trans_caption]}"
+        # puts "Updated translated caption: #{db_record[:trans_caption]}"
         db_record
       end
 

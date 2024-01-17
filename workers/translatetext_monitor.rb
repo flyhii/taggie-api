@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
 module TranslateText
-  # Infrastructure to clone while yielding progress
+  # Infrastructure to translate while yielding progress
   module TranslateTextMonitor
     SHOW_PROGRESS = {
       'STARTED'   => 15,
       'Calling'   => 30,
       'remote'    => 70,
+      'mapper'    => 80,
       'Receiving' => 85,
       'Resolving' => 95,
       'Checking'  => 100,
@@ -15,6 +16,10 @@ module TranslateText
 
     def self.starting_percent
       SHOW_PROGRESS['STARTED'].to_s
+    end
+
+    def self.mapper_done
+      SHOW_PROGRESS['mapper'].to_s
     end
 
     def self.finished_percent

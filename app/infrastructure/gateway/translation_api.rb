@@ -19,7 +19,7 @@ module FlyHii
       end
 
       def translation(target_language, content)
-        puts 'google translate'
+        puts 'google translate api'
         Request.new(API_GOOGLE_ROOT, @google_token)
           .translation_url(target_language, content)
       end
