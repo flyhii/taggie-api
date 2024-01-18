@@ -32,7 +32,6 @@ module FlyHii
             routing.on String do |language|
               # POST /api/v1/posts/translate
               routing.post do
-                puts 'translateeeeeeeeeeeeeeeee'
                 language ||= 'en' # Set a default target language if not provided
 
                 result = Service::TranslateAllPosts.new.call(
@@ -99,10 +98,10 @@ module FlyHii
 
               puts result.value!.message
 
-              # recent_result = Service::AddRecentPost.new.call(
-              #   hashtag_name:
-              # )
-              # puts 'recentresult'
+              recent_result = Service::AddRecentPost.new.call(
+                hashtag_name:
+              )
+              puts "recentresult=#{recent_result}"
               # if recent_result.failure?
               #   failed = Representer::HttpResponse.new(recent_result.failure)
               #   puts failed.http_status_code

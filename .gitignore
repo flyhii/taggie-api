@@ -1,6 +1,7 @@
 _snippets/
 .bundle/
 config/secrets.yml
+config/keyfile.json
 coverage/*
 !coverage/.resultset.json
 *.db
