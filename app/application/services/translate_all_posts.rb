@@ -92,8 +92,8 @@ module FlyHii
           all_posts.to_h do |post|
           puts post[:caption]
           translated_caption = GoogleTranslate::TransTextMapper
-            .new(App.config.GOOGLE_PROJECT_ID)
-            .translate(input, post[:caption].to_json)
+            .new(App.config.GOOGLE_TOKEN)
+            .translate(input, post[:caption])
           [post[:remote_id], JSON.parse(translated_caption)['data']['translations'][0]['translatedText']]
         end
       rescue StandardError

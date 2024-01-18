@@ -30,8 +30,9 @@ module FlyHii
           @resource_root = resource_root
           @token = token
           @headers = {
-            'Authorization'       => "Bearer #{`gcloud auth print-access-token`.strip}",
-            'x-goog-user-project' => @token,
+            # 'Authorization'       => "Bearer #{`gcloud auth print-access-token`.strip}",
+            # 'x-goog-user-project' => @token,
+            'X-goog-api-key'      => @token,
             'Content-Type'        => 'application/json; charset=utf-8'
           }
         end
