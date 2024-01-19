@@ -44,7 +44,6 @@ module TranslateText
       # translated_storage = store_post_worker(result)
       job.report_each_second(2) { TranslateTextMonitor.mapper_done }
       # FlyHii::Repository.entity(result).create(result)
-
       # FlyHii::TranslateRepo.new(job.project, Worker.config).translate_locally do |line|
       #   job.report TranslateTextMonitor.progress(line)
       # end

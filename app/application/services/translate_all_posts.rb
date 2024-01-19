@@ -11,6 +11,7 @@ module FlyHii
       # step :request_translate_worker
       step :translate_posts
       step :store_post
+    # step :retrieve_post
 
       private
 
@@ -55,7 +56,7 @@ module FlyHii
         puts 'google translate'
         # puts input
         all_posts = post_in_database
-        puts input[:translated_captions] = translate_posts_from_google(input[:target_language], all_posts)
+        puts input[:trans_captions] = translate_posts_from_google(input[:target_language], all_posts)
         Success(input)
       rescue StandardError => e
         Failure(Response::ApiResult.new(status: :not_found, message: e.to_s))
@@ -63,7 +64,7 @@ module FlyHii
 
       def store_post(input)
         puts 'store'
-        Repository::Translation.create(input[:translated_captions])
+        Repository::Translation.create(input[:trans_captions])
         Repository::For.klass(Entity::Post).find_full_name
           .then { |posts| Entity::PostsList.new(posts) }
           .then { |list| Response::ApiResult.new(status: :ok, message: list) }
