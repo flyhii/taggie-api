@@ -33,7 +33,6 @@ gem 'redis-rack-cache', '~> 2.2'
 # Validation
 gem 'dry-struct', '~> 1.0'
 gem 'dry-types', '~> 1.0'
-gem 'google-cloud-translate'
 
 # INFRASTRUCTURE LAYER
 # Networking
@@ -77,4 +76,9 @@ group :development do
   gem 'reek'
   gem 'rerun', '~> 0.0'
   gem 'rubocop', '~> 1.0'
+end
+
+group :translation do
+  gem 'google-cloud-translate'
+  gem 'google-cloud-translate-v2'
 end

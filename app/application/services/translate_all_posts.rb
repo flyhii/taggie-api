@@ -8,8 +8,7 @@ module FlyHii
     class TranslateAllPosts
       include Dry::Transaction
 
-    # step :validate_language
-      step :request_translate_worker
+      # step :request_translate_worker
       step :translate_posts
       step :store_post
     # step :retrieve_post
@@ -32,8 +31,15 @@ module FlyHii
       end
 
       def request_translate_worker(input)
-        puts 'inside worker'
-        Messaging::Queue.new(App.config.TRANSLATE_QUEUE_URL, App.config).send(message)
+        puts 'inside request worker'
+        posts = post_in_database
+        language = input[:target_language]
+        json = {
+          target_language: language,
+          all_posts: posts
+        }.to_json
+        puts json
+        Messaging::Queue.new(App.config.TRANSLATE_QUEUE_URL, App.config).send(json)
         Failure(Response::ApiResult.new(status: :processing,
                                         message: { request_id: input[:request_id], msg: PROCESSING_MSG }))
         # Messaging::Queue
@@ -69,14 +75,26 @@ module FlyHii
         Failure(Response::ApiResult.new(status: :internal_error, message: DB_ERR_MSG))
       end
 
-      def translate_posts_from_google(input, all_posts) # rubocop:disable Metrics/AbcSize
+      def translate_posts_from_google(input, all_posts)
         puts '99'
-        all_posts.to_h do |post|
+        # google_project_id = App.config.GOOGLE_PROJECT_ID
+        # all_posts.to_h do |post|
+        #   puts 'queue working'
+        #   json = {
+        #     google_pj_id: google_project_id,
+        #     target_language: input,
+        #     remote_id: post[:remote_id],
+        #     all_posts: post[:caption]
+        #   }.to_json
+        #   puts json
+        #   Messaging::Queue.new(App.config.TRANSLATE_QUEUE_URL, App.config).send(json)
+        #   Failure(Response::ApiResult.new(status: :processing,
+        #                                   message: { request_id: input[:request_id], msg: PROCESSING_MSG }))
+          all_posts.to_h do |post|
           puts post[:caption]
-          #   po = post[:caption].split("\n")
           translated_caption = GoogleTranslate::TransTextMapper
-            .new(App.config.GOOGLE_PROJECT_ID)
-            .translate(input, post[:caption].to_json)
+            .new(App.config.GOOGLE_TOKEN)
+            .translate(input, post[:caption])
           [post[:remote_id], JSON.parse(translated_caption)['data']['translations'][0]['translatedText']]
         end
       rescue StandardError
