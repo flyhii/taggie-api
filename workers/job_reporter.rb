@@ -5,7 +5,7 @@ require_relative 'progress_publisher'
 module TranslateText
   # Reports job progress to client
   class JobReporter
-    attr_accessor :caption
+    attr_accessor :caption, :remote_id
 
     def initialize(request_json, config)
       puts 'jobreporter init'
@@ -15,7 +15,7 @@ module TranslateText
 
       @token = config
       @post = show_request.caption
-      @publisher = ProgressPublisher.new(config, show_request.id)
+      @publisher = ProgressPublisher.new(config, show_request.remote_id)
     end
 
     def report(msg)
