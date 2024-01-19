@@ -24,6 +24,7 @@ module FlyHii
       GOOGLE_NOT_FOUND_MSG = 'Could not translate that post on Google'
       PROCESSING_MSG = 'Processing the summary request'
       WORKER_ERR = 'Cannot process worker'
+      CANT_ACCESS_WORKER_MSG = 'Cannot process into worker'
 
       def validate_language(input)
         list_request = input[:list_request].call
