@@ -73,6 +73,7 @@ module FlyHii
           puts 'is there a tag?'
           puts @entity.tags
           return if @entity.tags.nil?
+
           puts @entity.tags
           Hashtags.db_find_or_create(@entity.tags)
           puts 'hashtag added to db'

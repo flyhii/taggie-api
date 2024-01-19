@@ -19,7 +19,7 @@ module FlyHii
       end
 
       def translation(target_language, content)
-        puts 'google translate'
+        puts 'google translate api'
         Request.new(API_GOOGLE_ROOT, @google_token)
           .translation_url(target_language, content)
       end
@@ -30,8 +30,9 @@ module FlyHii
           @resource_root = resource_root
           @token = token
           @headers = {
-            'Authorization'       => "Bearer #{`gcloud auth print-access-token`.strip}",
-            'x-goog-user-project' => @token,
+            # 'Authorization'       => "Bearer #{`gcloud auth print-access-token`.strip}",
+            # 'x-goog-user-project' => @token,
+            'X-goog-api-key'      => @token,
             'Content-Type'        => 'application/json; charset=utf-8'
           }
         end

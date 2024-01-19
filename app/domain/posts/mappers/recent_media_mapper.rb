@@ -32,6 +32,7 @@ module FlyHii
       end
 
       def build_entity
+        puts 'build_entity'
         @recentposts.map do |recentpost|
           DataMapper.new(recentpost).build_entity
         end
@@ -43,7 +44,7 @@ module FlyHii
           @data = data
         end
 
-        def build_entity
+        def build_entity # rubocop:disable Metrics/MethodLength
           Entity::RecentPost.new(
             id: nil,
             remote_id:,
@@ -52,7 +53,8 @@ module FlyHii
             comments_count:,
             like_count:,
             timestamp:,
-            media_url:
+            media_url:,
+            trans_caption: nil
           )
         end
 
@@ -65,6 +67,7 @@ module FlyHii
         end
 
         def tags
+          puts @data['caption'].scan(/#([^\s]+)/).flatten.join(' ')
           @data['caption'].scan(/#([^\s]+)/).flatten.join(' ')
         end
 
