@@ -24,7 +24,6 @@ module FlyHii
       GOOGLE_NOT_FOUND_MSG = 'Could not translate that post on Google'
       PROCESSING_MSG = 'Processing the summary request'
       WORKER_ERR = 'Cannot process worker'
-      CANT_ACCESS_WORKER_MSG = 'Cannot process into worker'
 
       def validate_language(input)
         list_request = input[:list_request].call
@@ -52,11 +51,13 @@ module FlyHii
       def ask_translate_worker(input)
         puts 'in service ask worker'
         puts input
+        # Messaging::Queue.new(App.config.TRANSLATE_QUEUE_URL, App.config).send(translate_request_json(input))
         Messaging::Queue.new(App.config.TRANSLATE_QUEUE_URL, App.config).send(input.to_json)
         Failure(Response::ApiResult.new(status: :processing,
                                         message: { request_id: input[:request_id], msg: PROCESSING_MSG }))
-      rescue StandardError
-        raise CANT_ACCESS_WORKER_MSG
+      rescue StandardError => e
+        log_error(e)
+        Failure(Response::ApiResult.new(status: :internal_error, message: WORKER_ERR))
       end
 
       def store_post
@@ -100,6 +101,16 @@ module FlyHii
         # end
       rescue StandardError
         raise GOOGLE_NOT_FOUND_MSG
+      end
+
+      def log_error(error)
+        App.logger.error [error.inspect, error.backtrace].flatten.join("\n")
+      end
+
+      def translate_request_json(input)
+        Response::TranslateRequest.new(input[:caption], input[:request_id])
+          .then { Representer::TranslateRequest.new(_1) }
+          .then(&:to_json)
       end
 
       def post_in_database

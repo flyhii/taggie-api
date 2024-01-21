@@ -26,29 +26,26 @@ module TranslateText
       region: config.AWS_REGION
     )
 
-    @google_pj_id2 = config.GOOGLE_PROJECT_ID
-    puts @google_pj_id2
-
     include Shoryuken::Worker
     Shoryuken.sqs_client_receive_message_opts = { wait_time_seconds: 10 }
     shoryuken_options queue: config.TRANSLATE_QUEUE_URL, auto_delete: true
 
     def perform(_sqs_msg, request)
-      # job = JobReporter.new(request, Worker.config)
+      job = JobReporter.new(request, Worker.config)
       puts 'in perform'
 
-      # job.report_each_second(2) { TranslateTextMonitor.starting_percent }
+      job.report_each_second(2) { TranslateTextMonitor.starting_percent }
       result = translation_mapper_worker(request)
       puts "result: #{result}"
       # puts store_post_worker(result)
-      # job.report_each_second(2) { TranslateTextMonitor.mapper_done }
-      # FlyHii::Repository.entity(result).create(result)
+      job.report_each_second(2) { TranslateTextMonitor.mapper_done }
+
       # FlyHii::TranslateRepo.new(job.project, Worker.config).translate_locally do |line|
       #   job.report TranslateTextMonitor.progress(line)
       # end
 
       # Keep sending finished status to any latecoming subscribers
-      # job.report_each_second(5) { TranslateTextMonitor.finished_percent }
+      job.report_each_second(5) { TranslateTextMonitor.finished_percent }
     rescue FlyHii::TranslateRepo::Errors::NoTranslateTextFound
       # worker should crash fail early - only catch errors we expect!
       puts 'ALREADY TRAANSLATED -- ignoring request'
@@ -80,7 +77,7 @@ module TranslateText
           remote_id => translate_text
         }
         puts "translated_caption_storage: #{translated_caption_storage}"
-        FlyHii::Repository::Translation.create(translated_caption_storage)
+        store_post_worker(translated_caption_storage)
       end
       # google_pj_id = data_hash['google_pj_id']
       # target_language = data_hash['target_language']

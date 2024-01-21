@@ -9,13 +9,23 @@ module TranslateText
 
     def initialize(request_json, config)
       puts 'jobreporter init'
-      show_request = FlyHii::Representer::TranslateRequest
-        .new(OpenStruct.new) # rubocop:disable Style/OpenStructUse
-        .from_json(request_json)
+      show_request = JSON.parse(request_json)
+      # show_request = FlyHii::Representer::TranslateRequest
+      #   .new(OpenStruct.new)
+      #   .from_json(request_json)
+      puts 'outside'
+      puts show_request
 
       @token = config
-      @post = show_request.caption
-      @publisher = ProgressPublisher.new(config, show_request.remote_id)
+      # @caption = show_request.caption
+      show_request.each do |post|
+        @remote_id = post['post_id']
+        @post = post['all_posts']
+        puts "remote_id: #{@remote_id}"
+        puts "post: #{@post}"
+        @publisher = ProgressPublisher.new(config, @remote_id)
+      end
+
     end
 
     def report(msg)

@@ -32,10 +32,18 @@ module FlyHii
             routing.on String do |language|
               # POST /api/v1/posts/translate
               routing.post do
+                App.configure :production do
+                  response.cache_control public: true, max_age: 300
+                end
+
+                request_id = [request.env, request.path, Time.now.to_f].hash
+
                 language ||= 'en' # Set a default target language if not provided
 
                 result = Service::TranslateAllPosts.new.call(
-                  target_language: language
+                  target_language: language,
+                  request_id: request_id,
+                  config: App.config
                 )
                 puts "translated result: #{result}"
                 if result.failure?
@@ -85,6 +93,10 @@ module FlyHii
               result = Service::AddPost.new.call(
                 hashtag_name:
               )
+              # Service::AddPost.new.call(
+              #   hashtag_name:
+              # )
+              # result = Service::ShowTranslatePosts
               puts 'result'
               if result.failure?
                 failed = Representer::HttpResponse.new(result.failure)
@@ -119,8 +131,6 @@ module FlyHii
               # Representer::RecentPostsList.new(recent_result.value!.message).to_json
             end
           end
-
-          
 
           # routing.is do
           #   # GET /projects?list={base64_json_array_of_project_fullnames}

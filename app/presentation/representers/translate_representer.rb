@@ -11,8 +11,8 @@ module FlyHii
     class TranslateRequest < Roar::Decorator
       include Roar::JSON
 
-      # property :caption, extend: Representer::Post, class: OpenStruct # rubocop:disable Style/OpenStructUse
-      # property :remote_id, extend: Representer::Post, class: OpenStruct # rubocop:disable Style/OpenStructUse
+      # collection :caption, extend: Representer::Post, class: OpenStruct
+      # collection :remote_id, extend: Representer::Post, class: OpenStruct
       property :caption
       property :remote_id
     end
