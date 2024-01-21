@@ -31,7 +31,7 @@ module TranslateText
     shoryuken_options queue: config.TRANSLATE_QUEUE_URL, auto_delete: true
 
     def perform(_sqs_msg, request)
-      # job = JobReporter.new(request, Worker.config)
+      job = JobReporter.new(request, Worker.config)
       puts 'in perform'
 
       job.report_each_second(2) { TranslateTextMonitor.starting_percent }
@@ -45,7 +45,7 @@ module TranslateText
       # end
 
       # Keep sending finished status to any latecoming subscribers
-      # job.report_each_second(5) { TranslateTextMonitor.finished_percent }
+      job.report_each_second(5) { TranslateTextMonitor.finished_percent }
     rescue FlyHii::TranslateRepo::Errors::NoTranslateTextFound
       # worker should crash fail early - only catch errors we expect!
       puts 'ALREADY TRAANSLATED -- ignoring request'
