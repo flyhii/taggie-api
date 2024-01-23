@@ -38,11 +38,11 @@ module FlyHii
 
                 request_id = [request.env, request.path, Time.now.to_f].hash
 
-                language ||= 'en' # Set a default target language if not provided
+                target_language ||= 'en' # Set a default target language if not provided
 
                 result = Service::TranslateAllPosts.new.call(
-                  target_language: language,
-                  request_id: request_id,
+                  target_language:,
+                  request_id:,
                   config: App.config
                 )
                 puts "translated result: #{result}"
@@ -151,6 +151,20 @@ module FlyHii
           #     Representer::PostsList.new(result.value!.message).to_json
           #   end
           # end
+        end
+
+        routing.on 'recent-posts' do
+          routing.on String do |hashtag_name|
+            # GET /recent-posts/{hashtag_name}
+            routing.get do
+              puts '6'
+              recent_result = Service::GetRecentPost.new.call(
+                hashtag_name:
+              )
+              puts "recentresult=#{recent_result}"
+              Representer::RecentPostsList.new(recent_result.value!.message).to_json
+            end
+          end
         end
       end
     end
