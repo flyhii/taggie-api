@@ -3,6 +3,6 @@
 module FlyHii
   module Entity
     # List of recent posts
-    RecentPostsList = Struct.new(:posts)
+    RecentPostsList = Struct.new(:recentposts)
   end
 end

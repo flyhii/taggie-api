@@ -29,7 +29,7 @@ module FlyHii
       routing.on 'api/v1' do
         routing.on 'posts' do
           routing.on 'translate' do
-            routing.on String do |language|
+            routing.on String do |target_language|
               # POST /api/v1/posts/translate
               routing.post do
                 App.configure :production do
@@ -153,7 +153,7 @@ module FlyHii
           # end
         end
 
-        routing.on 'recent-posts' do
+        routing.on 'recentposts' do
           routing.on String do |hashtag_name|
             # GET /recent-posts/{hashtag_name}
             routing.get do
@@ -162,6 +162,7 @@ module FlyHii
                 hashtag_name:
               )
               puts "recentresult=#{recent_result}"
+              puts "I'm going back!"
               Representer::RecentPostsList.new(recent_result.value!.message).to_json
             end
           end
