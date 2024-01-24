@@ -35,8 +35,7 @@ module TranslateText
       puts 'in perform'
 
       job.report_each_second(2) { TranslateTextMonitor.starting_percent }
-      result = translation_mapper_worker(request)
-      puts "result: #{result}"
+      translation_mapper_worker(request)
       # puts store_post_worker(result)
       job.report_each_second(2) { TranslateTextMonitor.mapper_done }
 
@@ -58,10 +57,6 @@ module TranslateText
       # puts data_hash
       translated_captions = data_hash.map do |post|
         puts 'translation_mapper_worker working'
-        # google_pj_id = ['google_pj_id']
-        # target_language = ['target_language']
-        # remote_id = ['post_id']
-        # all_posts = ['all_posts']
         input_hash = JSON.parse(post)
         google_pj_id = input_hash['google_pj_id']
         target_language = input_hash['target_language']
@@ -70,36 +65,15 @@ module TranslateText
         translated_caption = FlyHii::GoogleTranslate::TransTextMapper
           .new(google_pj_id)
           .translate(target_language, all_posts.to_json)
-        puts "translated_caption: #{translated_caption}"
+        # puts "translated_caption: #{translated_caption}"
         translate_text = JSON.parse(translated_caption)['data']['translations'][0]['translatedText']
-        puts "translate_text: #{translate_text}"
+        # puts "translate_text: #{translate_text}"
         translated_caption_storage = {
           remote_id => translate_text
         }
-        puts "translated_caption_storage: #{translated_caption_storage}"
+        # puts "translated_caption_storage: #{translated_caption_storage}"
         store_post_worker(translated_caption_storage)
       end
-      # google_pj_id = data_hash['google_pj_id']
-      # target_language = data_hash['target_language']
-      # remote_id = data_hash['post_id']
-      # all_posts = data_hash['all_posts']
-      # translated_caption = FlyHii::GoogleTranslate::TransTextMapper
-      #   .new(google_pj_id)
-      #   .translate(target_language, all_posts.to_json)
-      # puts "translated_caption: #{translated_caption}"
-      # translate_text = JSON.parse(translated_caption)['data']['translations'][0]['translatedText']
-      # puts "translate_text: #{translate_text}"
-      # translated_caption_storage = {
-      #   'remote_id'      => remote_id,
-      #   'translatedtext' => translate_text
-      # }
-      # translated_caption_storage = {
-      #   remote_id => translate_text
-      # }
-      # puts "translated_caption_storage: #{translated_caption_storage}"
-      # FlyHii::Repository::Translation.create(translated_caption_storage)
-        # [post[:remote_id], JSON.parse(translated_caption)['data']['translations'][0]['translatedText']]
-        # Repository::Translation.create(input[:translated_captions])
     end
 
     def store_post_worker(input)

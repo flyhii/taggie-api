@@ -15,7 +15,6 @@ module FlyHii
       step :translate_posts
       step :ask_translate_worker
       step :store_post
-    # step :retrieve_post
 
       private
 
@@ -43,18 +42,26 @@ module FlyHii
         # worker stuff
         all_posts = post_in_database
         translated_posts = translate_posts_from_google(input[:target_language], all_posts)
-        Success(translated_posts)
+        request_id = input[:request_id]
+        puts request_id
+        combine_message = {
+          id: input[:request_id],
+          translated_posts:
+        }.to_json
+        Success(combine_message)
       rescue StandardError => e
         Failure(Response::ApiResult.new(status: :not_found, message: e.to_s))
       end
 
       def ask_translate_worker(input)
         puts 'in service ask worker'
-        puts input
+        data = JSON.parse(input)
+        message = data['translated_posts']
+        request_id = data['id']
         # Messaging::Queue.new(App.config.TRANSLATE_QUEUE_URL, App.config).send(translate_request_json(input))
-        Messaging::Queue.new(App.config.TRANSLATE_QUEUE_URL, App.config).send(input.to_json)
+        Messaging::Queue.new(App.config.TRANSLATE_QUEUE_URL, App.config).send(message.to_json)
         Failure(Response::ApiResult.new(status: :processing,
-                                        message: { request_id: input[:request_id], msg: PROCESSING_MSG }))
+                                        message: { request_id:, msg: PROCESSING_MSG }))
       rescue StandardError => e
         log_error(e)
         Failure(Response::ApiResult.new(status: :internal_error, message: WORKER_ERR))
