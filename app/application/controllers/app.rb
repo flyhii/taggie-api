@@ -29,13 +29,21 @@ module FlyHii
       routing.on 'api/v1' do
         routing.on 'posts' do
           routing.on 'translate' do
-            routing.on String do |language|
+            routing.on String do |target_language|
               # POST /api/v1/posts/translate
               routing.post do
-                language ||= 'en' # Set a default target language if not provided
+                App.configure :production do
+                  response.cache_control public: true, max_age: 300
+                end
+
+                request_id = [request.env, request.path, Time.now.to_f].hash
+
+                target_language ||= 'en' # Set a default target language if not provided
 
                 result = Service::TranslateAllPosts.new.call(
-                  target_language: language
+                  target_language:,
+                  request_id:,
+                  config: App.config
                 )
                 puts "translated result: #{result}"
                 if result.failure?
@@ -85,6 +93,10 @@ module FlyHii
               result = Service::AddPost.new.call(
                 hashtag_name:
               )
+              # Service::AddPost.new.call(
+              #   hashtag_name:
+              # )
+              # result = Service::ShowTranslatePosts
               puts 'result'
               if result.failure?
                 failed = Representer::HttpResponse.new(result.failure)
@@ -120,8 +132,6 @@ module FlyHii
             end
           end
 
-          
-
           # routing.is do
           #   # GET /projects?list={base64_json_array_of_project_fullnames}
           #   routing.get do
@@ -141,6 +151,21 @@ module FlyHii
           #     Representer::PostsList.new(result.value!.message).to_json
           #   end
           # end
+        end
+
+        routing.on 'recentposts' do
+          routing.on String do |hashtag_name|
+            # GET /recent-posts/{hashtag_name}
+            routing.get do
+              puts '6'
+              recent_result = Service::GetRecentPost.new.call(
+                hashtag_name:
+              )
+              puts "recentresult=#{recent_result}"
+              puts "I'm going back!"
+              Representer::RecentPostsList.new(recent_result.value!.message).to_json
+            end
+          end
         end
       end
     end

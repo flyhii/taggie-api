@@ -8,10 +8,13 @@ module FlyHii
     class TranslateAllPosts
       include Dry::Transaction
 
-      # step :request_translate_worker
+      # step :validate_language
+      # step :translate_posts
+      # step :store_post
+      # worker stuff
       step :translate_posts
+      step :ask_translate_worker
       step :store_post
-    # step :retrieve_post
 
       private
 
@@ -30,41 +33,45 @@ module FlyHii
         end
       end
 
-      def request_translate_worker(input)
-        puts 'inside request worker'
-        posts = post_in_database
-        language = input[:target_language]
-        json = {
-          target_language: language,
-          all_posts: posts
-        }.to_json
-        puts json
-        Messaging::Queue.new(App.config.TRANSLATE_QUEUE_URL, App.config).send(json)
-        Failure(Response::ApiResult.new(status: :processing,
-                                        message: { request_id: input[:request_id], msg: PROCESSING_MSG }))
-        # Messaging::Queue
-        #   .new(App.config.TRANSLATE_QUEUE_URL, App.config)
-        #   .send(Representer::Post.new(input[:trans_caption]).to_json)
-
-        # Failure(Response::ApiResult.new(status: :processing, message: PROCESSING_MSG))
-      rescue StandardError
-        # log_error(e)
-        Failure(Response::ApiResult.new(status: :internal_error, message: WORKER_ERR))
-      end
-
       def translate_posts(input)
         puts 'google translate'
         # puts input
+        # all_posts = post_in_database
+        # puts input[:translated_captions] = translate_posts_from_google(input[:target_language], all_posts)
+        # Success(input)
+        # worker stuff
         all_posts = post_in_database
-        puts input[:trans_captions] = translate_posts_from_google(input[:target_language], all_posts)
-        Success(input)
+        translated_posts = translate_posts_from_google(input[:target_language], all_posts)
+        request_id = input[:request_id]
+        puts request_id
+        combine_message = {
+          id: input[:request_id],
+          translated_posts:
+        }.to_json
+        Success(combine_message)
       rescue StandardError => e
         Failure(Response::ApiResult.new(status: :not_found, message: e.to_s))
       end
 
-      def store_post(input)
+      def ask_translate_worker(input)
+        puts 'in service ask worker'
+        data = JSON.parse(input)
+        message = data['translated_posts']
+        request_id = data['id']
+        # Messaging::Queue.new(App.config.TRANSLATE_QUEUE_URL, App.config).send(translate_request_json(input))
+        Messaging::Queue.new(App.config.TRANSLATE_QUEUE_URL, App.config).send(message.to_json)
+        Failure(Response::ApiResult.new(status: :processing,
+                                        message: { request_id:, msg: PROCESSING_MSG }))
+      rescue StandardError => e
+        log_error(e)
+        Failure(Response::ApiResult.new(status: :internal_error, message: WORKER_ERR))
+      end
+
+      def store_post
         puts 'store'
-        Repository::Translation.create(input[:trans_captions])
+        # worker stuff
+        # comment out Repository::Translation.create(input[:translated_captions])
+        # Repository::Translation.create(input[:translated_captions])
         Repository::For.klass(Entity::Post).find_full_name
           .then { |posts| Entity::PostsList.new(posts) }
           .then { |list| Response::ApiResult.new(status: :ok, message: list) }
@@ -77,28 +84,40 @@ module FlyHii
 
       def translate_posts_from_google(input, all_posts)
         puts '99'
-        # google_project_id = App.config.GOOGLE_PROJECT_ID
-        # all_posts.to_h do |post|
-        #   puts 'queue working'
-        #   json = {
-        #     google_pj_id: google_project_id,
-        #     target_language: input,
-        #     remote_id: post[:remote_id],
-        #     all_posts: post[:caption]
-        #   }.to_json
-        #   puts json
-        #   Messaging::Queue.new(App.config.TRANSLATE_QUEUE_URL, App.config).send(json)
-        #   Failure(Response::ApiResult.new(status: :processing,
-        #                                   message: { request_id: input[:request_id], msg: PROCESSING_MSG }))
-          all_posts.to_h do |post|
-          puts post[:caption]
-          translated_caption = GoogleTranslate::TransTextMapper
-            .new(App.config.GOOGLE_TOKEN)
-            .translate(input, post[:caption])
-          [post[:remote_id], JSON.parse(translated_caption)['data']['translations'][0]['translatedText']]
+        # worker stuff
+        google_project_id = App.config.GOOGLE_TOKEN
+        json_map = all_posts.map do |post|
+          puts 'queue working'
+          json = {
+            google_pj_id: google_project_id,
+            target_language: input,
+            post_id: post[:remote_id],
+            all_posts: post[:caption]
+          }.to_json
+          puts json
+          json
         end
+        puts "json: #{json_map}"
+        json_map
+        #   all_posts.to_h do |post|
+        #   puts post[:caption]
+        #   translated_caption = GoogleTranslate::TransTextMapper
+        #     .new(App.config.GOOGLE_TOKEN)
+        #     .translate(input, post[:caption])
+        #   [post[:remote_id], JSON.parse(translated_caption)['data']['translations'][0]['translatedText']]
+        # end
       rescue StandardError
         raise GOOGLE_NOT_FOUND_MSG
+      end
+
+      def log_error(error)
+        App.logger.error [error.inspect, error.backtrace].flatten.join("\n")
+      end
+
+      def translate_request_json(input)
+        Response::TranslateRequest.new(input[:caption], input[:request_id])
+          .then { Representer::TranslateRequest.new(_1) }
+          .then(&:to_json)
       end
 
       def post_in_database

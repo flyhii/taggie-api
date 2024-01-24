@@ -8,6 +8,7 @@ module DatabaseHelper
     FlyHii::App.db.run('PRAGMA foreign_keys = OFF')
     FlyHii::Database::MediaOrm.map(&:destroy)
     FlyHii::Database::HashtagOrm.map(&:destroy)
+    FlyHii::Database::RecentMediaOrm.map(&:destroy)
     FlyHii::App.db.run('PRAGMA foreign_keys = ON')
   end
 end
