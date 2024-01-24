@@ -53,7 +53,7 @@ module FlyHii
         end
 
         def create_post
-          puts @entity.remote_id
+          puts @entity.to_attr_hash
           Database::RecentMediaOrm.create(@entity.to_attr_hash)
         end
 

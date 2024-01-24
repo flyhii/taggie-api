@@ -7,12 +7,14 @@ require_relative 'post_representer'
 # Represents essential Repo information for API output
 module FlyHii
   module Representer
-    # Representer object for project clone requests
+    # Representer object for translate requests
     class TranslateRequest < Roar::Decorator
       include Roar::JSON
 
-      property :caption, extend: Representer::Post, class: OpenStruct
-      property :remote_id, extend: Representer::Post, class: OpenStruct
+      # collection :caption, extend: Representer::Post, class: OpenStruct
+      # collection :remote_id, extend: Representer::Post, class: OpenStruct
+      property :caption
+      property :remote_id
     end
   end
 end
