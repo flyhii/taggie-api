@@ -50,6 +50,11 @@ module FlyHii
                   failed = Representer::HttpResponse.new(result.failure)
                   routing.halt failed.http_status_code, failed.to_json
                 end
+                # if result.value!.status == :processing
+                #   http_response = Representer::HttpResponse.new(result.value!)
+                #   response.status = http_response.http_status_code
+                #   return http_response.to_json
+                # end
 
                 http_response = Representer::HttpResponse.new(result.value!)
                 response.status = http_response.http_status_code

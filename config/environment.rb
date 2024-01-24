@@ -38,8 +38,8 @@ module FlyHii
 
       use Rack::Cache,
           verbose: true,
-          metastore: "#{config.REDIS_URL}/0/metastore",
-          entitystore: "#{config.REDIS_URL}/0/entitystore"
+          metastore: "#{config.REDISCLOUD_URL}/0/metastore",
+          entitystore: "#{config.REDISCLOUD_URL}/0/entitystore"
     end
 
     # Automated HTTP stubbing for testing only
